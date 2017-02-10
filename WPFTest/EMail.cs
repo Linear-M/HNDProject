@@ -26,7 +26,7 @@ namespace WPFTest
             client.EnableSsl = true;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential("bapople@gmail.com", "windows7fails");
+            client.Credentials = new NetworkCredential("bapople@gmail.com", "ss");
             try
             {
                 client.Send(msg);
