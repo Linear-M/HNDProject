@@ -14,6 +14,9 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Controls;
 using System.Diagnostics;
+using System.IO;
+using System.Xml;
+using System.IO;
 
 namespace WPFTest
 {
@@ -347,41 +350,52 @@ namespace WPFTest
 
         public static string emailBody()
         {
-            string body = "Hi, " + LoginHandler.username + "!" + Environment.NewLine + Environment.NewLine;
-            body += "You've been busy this week, you currently have " + projectList.Count + " projects you're working on with " + taskCount + " tasks" + Environment.NewLine + Environment.NewLine;
-            body += "Here's a list of your projects (Name - Length): ";
+            
+            string body = "<!DOCTYPE html><html><head><style>table,th,td{border: 1px solid black; padding: 5px;} table{border-spacing: 5px;} h1,p,td,tr,th,body{font-family: arial;} body{background-color: lightblue;}</style></head><body>";
+
+            body += "<h1>Hi, " + LoginHandler.username + "!</h1>";
+
+            body += "<p>You've been busy this week - you currently have " + projectList.Count + " projects you're working on totalling " + taskCount + " tasks.</p>";
+
+            body += "<p>Here's a list of your projects:</p>";
+
+            body += "<table><tr><th>Project Name</th><th>Project Length</th></tr>";
 
             foreach (Project project in projectList)
             {
-                body += Environment.NewLine + project.x + " - " + project.projectLength;
+                body += "<tr><td>" + project.x + "</td><td>" + project.projectLength + "</td></tr>";
             }
 
-            body += Environment.NewLine + Environment.NewLine + "And here's a list of the tasks you should be working on this week" + Environment.NewLine;
+            body += "</table><br />";
+
+            body += "<p>Here's a list of the tasks you should be working on this week:<p>";
+            
 
             foreach (Project project in projectList)
             {
+                body += "<table><tr><th>Project Name</th><th>Task Name</th><th>Task Length (Hours)</th><th>Notes</th></tr>";
                 foreach (Task task in project.taskList)
                 {
                     Trace.WriteLine(task.EstimatedFinishingDate);
                     if (task.EstimatedFinishingDate <= DateTime.Now.AddDays(14))
                     {
-                        body += Environment.NewLine + "Project Name: " + project.x + ", Task Name: " + task.TaskName + ", Task Length: " + task.TaskLength;
+                        body += "<tr><td>" + project.x + "</td><td>" + task.TaskName + "</td><td>" + task.TaskLength + "</td>";
                         
                         if (task.StartDate != DateTime.MinValue)
                         {
-                            body += Environment.NewLine + "You started this task on " + task.StartDate.ToShortDateString() + " and are on target to finish it by " + task.EstimatedFinishingDate.ToShortDateString();
+                            body += "<td>You started this task on " + task.StartDate.ToShortDateString() + " and are on target to finish it by " + task.EstimatedFinishingDate.ToShortDateString() + "</td></tr>";
                         } else
                         {
-                            body += Environment.NewLine + "While this task isn't your priority, there's no harm in starting it!" + Environment.NewLine;
+                            body += "<td>While this task isn't your priority, there's no harm in starting it!</td></tr>";
                         }
                     }
-                    body += Environment.NewLine;
                 }
-                body += Environment.NewLine;
+                body += "</table><br/>";
             }
-            body += Environment.NewLine + "Make sure you check the Better Project app for a more detailed look!";
+            body += "Make sure you check the Better Project app for a more detailed look! </body></html>";
             return body;
         }
+
 
         public static void removeLabels(Chart chart)
         {
