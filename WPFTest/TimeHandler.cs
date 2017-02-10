@@ -249,7 +249,7 @@ namespace WPFTest
 
         private static void increaseTaskPriorities(Project project)
         {
-            foreach (Task task in project.taskList) 
+            foreach (Task task in project.taskList)  
             {
                 int newPriority = (task.Priority -= 1);
                 Trace.WriteLine("Changing '" + task.TaskName + "' priority from " + task.Priority + " to " + newPriority.ToString());
