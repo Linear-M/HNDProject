@@ -259,6 +259,7 @@ namespace WPFTest
             //Update task priorities server side
             Trace.WriteLine(project.x + "'s tasks have been updated - renewing database information...");
             DatabaseHandler.updateTaskPriorities(project);
+            DatabaseHandler.updateProjectLength(project.ID);
             Trace.WriteLine(project.x + "'s tasks have been updated - database successfully updated with " + project.taskList.Count.ToString() + " new task priorities");
         }
     }

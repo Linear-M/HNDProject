@@ -328,7 +328,7 @@ namespace WPFTest
             return projectLength;
         }
 
-        private static void updateProjectLength(int projectID)
+        public static void updateProjectLength(int projectID)
         {
             double projectLength = 0;
             Project currProject = null;
