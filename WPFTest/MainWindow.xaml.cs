@@ -126,10 +126,27 @@ namespace WPFTest
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(Convert.ToString(TimeHandler.Monday));
-           
+            EMail em = new EMail();
+            em.sendEmail(ModelView.emailBody());
         }
 
-        
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+            taskbarIcon.Visibility = Visibility.Visible;
+            
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            this.Show();
+            taskbarIcon.Visibility = Visibility.Hidden;
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }

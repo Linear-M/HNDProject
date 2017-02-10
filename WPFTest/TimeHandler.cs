@@ -185,7 +185,7 @@ namespace WPFTest
             
         }
 
-        public static void estimatedFinishingDate(Task task)
+        public static void estimatedTaskFinishingDate(Task task)
         {
             if (!areTimesLoaded)
             {

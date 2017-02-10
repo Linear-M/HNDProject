@@ -14,8 +14,14 @@
             <Setter Property="Text" Value="Select a Project Start Date" />
             <Setter Property="Background" Value="AliceBlue" />
         </Style>
+        <ResourceDictionary x:Key="iconResource">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WPFTest;component/icon.ico" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -40,9 +46,7 @@
         <Button x:Name="btnTaskView" Content="Switch to Task Menu" HorizontalAlignment="Left" Margin="20,11,0,0" VerticalAlignment="Top" Width="762" Background="#FF5C63F5" Height="60" Click="btnTaskView_Click" Grid.ColumnSpan="4" FontSize="24" BorderBrush="{x:Null}" BorderThickness="0" Foreground="White"/>
         <DatePicker x:Name="dpkrProjectStartDate" Margin="20,267,1,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Height="40" Background="#FF009EE8" RenderTransformOrigin="0.497,1.175" Text="Select a Project Start Date" Foreground="White"/>
 
-        <tb:TaskbarIcon
         
-        ToolTipText="hello world" />
 
     </Grid>
 

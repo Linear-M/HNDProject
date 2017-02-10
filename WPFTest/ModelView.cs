@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Controls;
+using System.Diagnostics;
 
 namespace WPFTest
 {
@@ -32,6 +33,29 @@ namespace WPFTest
             }
         }
 
+        public static int taskCount
+        {
+            get
+            {
+                int size = 0;
+                if (projectList.Count > 0)
+                {
+                    foreach (Project project in projectList)
+                    {
+                        size += project.taskList.Count;
+                    }
+                    return size;
+                }
+                else return 0;
+            }
+        }
+
+        public static int taskCountForProject(Project project)
+        {
+            return project.taskList.Count;
+        }
+
+
         public static void populateProjects(string Username)
         {
             purgeProjects();
@@ -41,6 +65,11 @@ namespace WPFTest
             foreach (Project project in projectList)
             {
                 TimeHandler.estimatedFinishingDate(project);
+                foreach (Task task in project.taskList)
+                {
+                    Trace.WriteLine("Calculating EFT for task: " + task.TaskName);
+                    TimeHandler.estimatedTaskFinishingDate(task);
+                }
             }
         }
 
@@ -89,7 +118,13 @@ namespace WPFTest
                                 {
                                     currPoint.Font = new Font("Arial", 8f);
                                     currPoint.LabelForeColor = Color.White;
-                                    currPoint.Label = "Task Name: " + task.TaskName;
+                                    if (task.StartDate != DateTime.MinValue)
+                                    {
+                                        currPoint.Label = "Task Name: " + task.TaskName + Environment.NewLine + "EFT: " + task.EstimatedFinishingDate.ToShortDateString();
+                                    } else
+                                    {
+                                        currPoint.Label = "Task Name: " + task.TaskName + Environment.NewLine + "No EFT as Not Priority";
+                                    }
                                     currPoint.ToolTip = task.TaskDescription + Environment.NewLine + "Priority: " + task.Priority.ToString();
                                 }
                             }
@@ -107,7 +142,7 @@ namespace WPFTest
                                     "Date Project Started: " + project.dateStarted.ToShortDateString() +
                                     Environment.NewLine +
                                     "Date Project Due: " + project.dateDue.ToShortDateString();
-                                if (project.estimatedFinishingDate == DateTime.MinValue)
+                                if (taskCountForProject(project) <= 0)
                                 {
                                     currPoint.Label += Environment.NewLine + "Estimated Finishing Date: NA (no tasks)";
                                 } else
@@ -308,6 +343,44 @@ namespace WPFTest
 
             //If more than one task and priority > base_priority return new priority
             return priority+=1;
+        }
+
+        public static string emailBody()
+        {
+            string body = "Hi, " + LoginHandler.username + "!" + Environment.NewLine + Environment.NewLine;
+            body += "You've been busy this week, you currently have " + projectList.Count + " projects you're working on with " + taskCount + " tasks" + Environment.NewLine + Environment.NewLine;
+            body += "Here's a list of your projects (Name - Length): ";
+
+            foreach (Project project in projectList)
+            {
+                body += Environment.NewLine + project.x + " - " + project.projectLength;
+            }
+
+            body += Environment.NewLine + Environment.NewLine + "And here's a list of the tasks you should be working on this week" + Environment.NewLine;
+
+            foreach (Project project in projectList)
+            {
+                foreach (Task task in project.taskList)
+                {
+                    Trace.WriteLine(task.EstimatedFinishingDate);
+                    if (task.EstimatedFinishingDate <= DateTime.Now.AddDays(14))
+                    {
+                        body += Environment.NewLine + "Project Name: " + project.x + ", Task Name: " + task.TaskName + ", Task Length: " + task.TaskLength;
+                        
+                        if (task.StartDate != DateTime.MinValue)
+                        {
+                            body += Environment.NewLine + "You started this task on " + task.StartDate.ToShortDateString() + " and are on target to finish it by " + task.EstimatedFinishingDate.ToShortDateString();
+                        } else
+                        {
+                            body += Environment.NewLine + "While this task isn't your priority, there's no harm in starting it!" + Environment.NewLine;
+                        }
+                    }
+                    body += Environment.NewLine;
+                }
+                body += Environment.NewLine;
+            }
+            body += Environment.NewLine + "Make sure you check the Better Project app for a more detailed look!";
+            return body;
         }
 
         public static void removeLabels(Chart chart)

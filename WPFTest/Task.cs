@@ -104,22 +104,18 @@ namespace WPFTest
             }
         }
 
-        public Task(string name, double length, string description, int priority, int projectID, int taskID)
+        public Task(string name, double length, string description, int priority, int projectID, int taskID, DateTime startDate)
         {
             TaskName = name;
             TaskDescription = description;
             TaskLength = length;
             Priority = priority;
             TaskID = taskID;
-        }
-        public Task(string name, double length, string description, int priority, int projectID, DateTime startDate, int taskID)
-        {
-            TaskName = name;
-            TaskDescription = description;
-            TaskLength = length;
-            Priority = priority;
-            StartDate = startDate;
-            TaskID = taskID;
+            //If the project is currently ON
+            if (startDate != DateTime.MinValue)
+            {
+                StartDate = startDate;
+            }
         }
     }
 }

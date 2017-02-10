@@ -118,6 +118,22 @@ namespace WPFTest
                     LoginHandler.password = password;
                     LoginHandler.loggedIn = true;
                     Conn.Close();
+
+                    sql = "SELECT EMail FROM tblUser WHERE Username='" + username + "'";
+                    command = new OleDbCommand(sql, Conn);
+
+                    Conn.Open();
+
+                    OleDbDataReader newReader = command.ExecuteReader();
+
+                    //While there is information stored in the connection buffer, add the projects (as data points/bars) to the chart
+                    while (newReader.Read())
+                    {
+                        LoginHandler.email = newReader["EMail"].ToString();
+                    }
+
+                    Conn.Close();
+
                 }
                 else
                 {
@@ -202,7 +218,7 @@ namespace WPFTest
         public static void loadNewTasks(Project project)
         {
             //SQL grabs the needed information to display task information, based on the clicked project
-            string SQL = "SELECT TaskID, TaskName, TaskDescription, TaskLength, Priority FROM tblTask WHERE ProjectID=" + project.ID + "";
+            string SQL = "SELECT TaskID, TaskName, TaskDescription, TaskLength, Priority, StartDate FROM tblTask WHERE ProjectID=" + project.ID + "";
             OleDbCommand command = new OleDbCommand(SQL, Conn);
             if (Conn.State == System.Data.ConnectionState.Open)
             {
@@ -222,7 +238,19 @@ namespace WPFTest
                     string description = newReader["TaskDescription"].ToString();
                     int priority = Convert.ToInt32(newReader["Priority"].ToString());
                     int taskID = Convert.ToInt32(newReader["TaskID"].ToString());
-                    project.taskList.Add(new Task(xPoint, yPoint, description, priority, project.ID, taskID));
+                    DateTime dateStarted;
+                    try
+                    {
+                        dateStarted = Convert.ToDateTime(newReader["StartDate"]);
+                        Trace.WriteLine("Task DateStarted: " + dateStarted.ToShortDateString());
+                    }
+                    catch (Exception)
+                    {
+                        //Program assumes datetime.minvalue means the task is not priority
+                        Trace.WriteLine("No Date Started - Providing MinDate");
+                        dateStarted = DateTime.MinValue;
+                    }
+                    project.taskList.Add(new Task(xPoint, yPoint, description, priority, project.ID, taskID, dateStarted));
                 }
             }
             Conn.Close();
