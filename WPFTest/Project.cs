@@ -13,6 +13,7 @@ namespace WPFTest
 {
     class Project
     {
+        //Encapsulated variables
         private ArrayList tasks = new ArrayList();
         private int _id;
 
@@ -85,6 +86,7 @@ namespace WPFTest
 
         public Project(string _x_projectName, double _y_projectLength, string _projectDescription, DateTime _dateStarted, DateTime _dateDue, double _projectLength, int _id)
         {
+            //Constructor for the project class
             x = _x_projectName;
             y = _y_projectLength;
             projectDescription = _projectDescription;

@@ -1,27 +1,17 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using System.Windows.Controls;
 using System.Diagnostics;
-using System.IO;
-using System.Xml;
-using System.IO;
+
 
 namespace WPFTest
 {
     class ModelView
     {
+        //Encapsulated variables
         private static ArrayList projList = new ArrayList();
 
         public static ArrayList projectList
@@ -38,11 +28,15 @@ namespace WPFTest
 
         public static int taskCount
         {
+            /*
+             * Returns the number of tasks accross each project stored for that user
+             */
             get
             {
                 int size = 0;
                 if (projectList.Count > 0)
                 {
+                    //Add the size of the task list for every project and return it
                     foreach (Project project in projectList)
                     {
                         size += project.taskList.Count;
@@ -55,16 +49,21 @@ namespace WPFTest
 
         public static int taskCountForProject(Project project)
         {
+            //Return the number of tasks for a given project
             return project.taskList.Count;
         }
 
 
         public static void populateProjects(string Username)
         {
+            /*
+             * Populate the project list for a given username
+             */
+            //Clear any projects in the system and load more from the database
             purgeProjects();
             DatabaseHandler.loadProjects(Username);
 
-            //Threadsafe estimation calculations
+            //Threadsafe estimation calculations for each project
             foreach (Project project in projectList)
             {
                 TimeHandler.estimatedFinishingDate(project);
@@ -78,6 +77,7 @@ namespace WPFTest
 
         private static void purgeProjects()
         {
+            //Clear the project list
             projList.Clear();
         }
 
@@ -90,13 +90,12 @@ namespace WPFTest
                 //Reset all bars/points of the chart (to make sure that a previously highlighted chart/point does not STAY highlighted)
                 foreach (DataPoint point in usedChart.Series[0].Points)
                 {
-                    //Colour changed to default, no hatch style (highlighting) and default border size
+                    //Colour etc changed to default
                     point.BackSecondaryColor = Color.Black;
                     point.BackHatchStyle = ChartHatchStyle.None;
                     point.BorderWidth = 1;
                     point.Color = ColorTranslator.FromHtml("#009ee8");
                 }
-
                 //If the mouse if over a data point (bar)
                 if (result.ChartElementType == ChartElementType.DataPoint)
                 {
@@ -109,10 +108,14 @@ namespace WPFTest
                 //Draw labels
                 DataPoint currPoint = getHoveredPoint(result, usedChart);
 
+                /*
+                 * If the current point exists as a datapoint and the axis' title is task name assume the clicked datapoint is in the task view
+                */
                 if (currPoint != null)
                 {
                     if (usedChart.ChartAreas[0].AxisX.Title == "Task Name")
                     {
+                        //Identify the task that has been highlighted and generate an appropriate label
                         foreach (Project project in projectList)
                         {
                             foreach (Task task in project.taskList)
@@ -128,12 +131,14 @@ namespace WPFTest
                                     {
                                         currPoint.Label = "Task Name: " + task.TaskName + Environment.NewLine + "No EFT as Not Priority";
                                     }
+                                    //Add a tooltip to the datapoint
                                     currPoint.ToolTip = task.TaskDescription + Environment.NewLine + "Priority: " + task.Priority.ToString();
                                 }
                             }
                         }
                     } else
                     {
+                        //If a project has been highlighted, identify which one it is an add an appropriate label
                         currPoint.Font = new Font("Arial", 8f);
                         currPoint.LabelForeColor = Color.White;
                         foreach (Project project in projectList)
@@ -152,6 +157,7 @@ namespace WPFTest
                                 {
                                     currPoint.Label += Environment.NewLine + "Estimated Finishing Date: " + project.estimatedFinishingDate.ToShortDateString();
                                 }
+                                //Add a tooltip to the datapoint
                                 currPoint.ToolTip = project.projectDescription.ToString();
                             }
                         }
@@ -159,6 +165,7 @@ namespace WPFTest
                 }
                 else
                 {
+                    //Seems as we're doing the hit-test on everything we just as well remove labels non-efficiently
                     removeLabels(usedChart);
                 }
 
@@ -168,10 +175,11 @@ namespace WPFTest
         
         public static Chart manageBarClicking(HitTestResult result, Chart usedChart)
         {
-            //Check to see if we are in task view (not project view)
+            //Check to see if we are in task view (not project view) and if so return a new project chart
             if (usedChart.ChartAreas[0].AxisX.Title == "Task Name")
             {
                 return projectChartGenerator("Project Name", "Hours Left");
+            //If we're in project view (and we need to generate a task view) find the project that has been clicked and either return null (no point clicked), usedChart (same) or the new task chart
             } else if (usedChart.ChartAreas[0].AxisX.Title == "Project Name")
             {
                 foreach (Project project in projectList)
@@ -203,6 +211,10 @@ namespace WPFTest
 
         public static Chart projectChartGenerator(string xAxisTitle, string yAxisTitle)
         {
+            /*
+             * This method returns a new chart based on the projects a user has
+             */
+            //If we haven't got a project list generate one based on username
             if (ModelView.projectList.Count <= 0)
             {
                 populateProjects(LoginHandler.username);
@@ -223,7 +235,7 @@ namespace WPFTest
             // Add a series with some data points.
             Series series = new Series();
 
-            //Sort projects by ascending estimated finishing date
+            //Sort projects by ascending estimated finishing date (we have to use an array because we can't manipulate arraylists in loop)
             Project[] sortedProjects = projectList.OfType<Project>().OrderBy(p => p.estimatedFinishingDate).ToArray();
 
             foreach (Project project in sortedProjects)
@@ -231,6 +243,7 @@ namespace WPFTest
                 series.Points.AddXY(project.x, project.y);
             }
 
+            //Add the series to the chart and format any labelling
             Chart1.Series.Add(series);
             Chart1.Series[0]["LabelStyle"] = "Bottom";
 
@@ -244,6 +257,9 @@ namespace WPFTest
 
         private static void taskChartGenerator(string xAxisTitle, string yAxisTitle, Project project)
         {
+            /*
+             * this method returns a new chart based upon a project's task list
+             */
             // Initialize the Chart object
             Chart Chart1 = new Chart();
             Chart1.BackColor = Color.LightSkyBlue;
@@ -257,8 +273,10 @@ namespace WPFTest
             // Add a series with some data points.
             Series series = new Series();
 
+            //Sort tasks by priority
             Task[] descSortedTasks = project.taskList.OfType<Task>().OrderBy(t => t.Priority).ToArray();
 
+            //Add the tasks to the series/chart
             foreach (Task task in descSortedTasks)
             {
                 series.Points.AddXY(task.TaskName, task.TaskLength);
@@ -277,7 +295,10 @@ namespace WPFTest
 
         public static void generateTaskCharts(string xAxisTitle, string yAxisTitle)
         {
-            //Little bit hacky, cant manipulate arraylist in non-safe collection so create array copy and then use arraylist constructor to reinstate data from the array
+            /*
+             * This method generates a chart for each task within a project
+             * NOTE: We have to be a bit 'hacky' here and convert the arraylist to an array so we can manipulate objects at run time
+             */
             Array projList = projectList.ToArray();
 
             foreach (Project p in projList)
@@ -285,11 +306,16 @@ namespace WPFTest
                 taskChartGenerator("Task Name", "Hours Left", p);
             }
 
+            //Convert the array and reinstantiate the project list
             projectList = new ArrayList(projList);
         }
 
         public static DataPoint getHoveredPoint(HitTestResult result, Chart usedChart)
         {
+            /*
+             * This method returns a datapoint that has been hovered over
+             */
+            //If the result is a datapoint return the datapoint itself
             if (result.ChartElementType == ChartElementType.DataPoint)
             {
                 return usedChart.Series[0].Points[result.PointIndex];
@@ -301,6 +327,9 @@ namespace WPFTest
 
         public static void taskListComboBoxHandler(System.Windows.Controls.ComboBox cb)
         {
+            /*
+             * This method takes a combo box and organises what items it should have based on loaded projects
+             */
             if (cb.Text.ToString() == "Please Select a Project")
             {
                 cb.Items.Clear();
@@ -320,6 +349,9 @@ namespace WPFTest
 
        public static int nextTaskPriority(Project project)
         {
+            /*
+             * This method identifies what priority a task should have and effectively applies them
+             */
             //semi-const start priority of 1 to make sure that if no other taks are present the initital task has 'first' priority
             int priority = 1;
 
@@ -350,7 +382,9 @@ namespace WPFTest
 
         public static string emailBody()
         {
-            
+            /*
+             * This method returns a long string that constitutes the entire body of an email. It shows a welcome message, project list and a seperate table per project of current tasks, their lengths and notes
+             */  
             string body = "<!DOCTYPE html><html><head><style>table,th,td{border: 1px solid black; padding: 5px;} table{border-spacing: 5px;} h1,p,td,tr,th,body{font-family: arial;} body{background-color: lightblue;}</style></head><body>";
 
             body += "<h1>Hi, " + LoginHandler.username + "!</h1>";
@@ -376,6 +410,7 @@ namespace WPFTest
                 body += "<table><tr><th>Project Name</th><th>Task Name</th><th>Task Length (Hours)</th><th>Notes</th></tr>";
                 foreach (Task task in project.taskList)
                 {
+                    //If the task's estimated finishing date is within a fortnight
                     Trace.WriteLine(task.EstimatedFinishingDate);
                     if (task.EstimatedFinishingDate <= DateTime.Now.AddDays(14))
                     {
@@ -399,6 +434,7 @@ namespace WPFTest
 
         public static void removeLabels(Chart chart)
         {
+            //Remove all of the labels for every datapoint
             foreach (DataPoint dp in chart.Series[0].Points)
             {
                 dp.Label = "";

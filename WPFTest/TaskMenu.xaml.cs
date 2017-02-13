@@ -26,14 +26,18 @@ namespace WPFTest
 
         private void cmbProjectSelector_MouseEnter(object sender, MouseEventArgs e)
         {
+            //If a user hovers over the combo box handle this in the modelview
             ModelView.taskListComboBoxHandler(cmbProjectSelector);
         }
 
         private void btnSaveTask_Click(object sender, RoutedEventArgs e)
         {
+            /*
+             * This method identifies the project being used as well as other task data, and calls the database handler to add them to the database
+             */
             int projectID = 0;
             int priority = 0;
-
+            //Identify what project is being used and update task priorities
             foreach (Project project in ModelView.projectList)
             {
                 if (project.x == cmbProjectSelector.SelectedValue.ToString())

@@ -11,6 +11,7 @@ namespace WPFTest
 {
     class TimeHandler
     {
+        //Encapsulated variables
         private static double monday;
         private static double tuesday;
         private static double wednesday;
@@ -106,6 +107,9 @@ namespace WPFTest
         }
         public static double HoursPerWeek
         {
+            /*
+             * Return the sum of every day's hour
+             */
             get
             {
                 return (Monday + Tuesday + Wednesday + Thursday + Friday + Saturday + Sunday);
@@ -113,6 +117,9 @@ namespace WPFTest
         }
         public static int ZeroHourDays
         {
+            /*
+             * Check each day to see if it is a 'non-working' day, and if so increment the 'zero day' counter
+             */
             get
             {
                 if (Monday == 0)
@@ -158,6 +165,10 @@ namespace WPFTest
 
         public static void estimatedFinishingDate(Project project)
         {
+            /*
+             * This method takes a project object and creates a date/time estimation as to when it will be finished
+             * NOTE: Project length is now determined by the length of the combined tasks to make it more accurate
+             */
             if (!areTimesLoaded)
             {
                 getTimes();
@@ -165,13 +176,19 @@ namespace WPFTest
 
             double projectLength = 0;
 
+            //For each task in the project add its length to the project length
             foreach (Task task in project.taskList)
             {
                 projectLength += task.TaskLength;
             }
 
+            //(If the project has tasks) calculate the estimated finishing date
             if (projectLength != 0)
             {
+                /*
+                 *Take the project length and divide it by the hours per week to get an estimation as to how many working weeks/days we need, then split it into the integer (week) and double (decimal day)
+                 *parts and cast them both to integers - take this, add the amount of non-working days and add the total 'new days' to the estimated finishing date (start date + needed days + zero hour days)
+                */
                 double totalTimeNeeded = (project.projectLength / HoursPerWeek);
                 project.estimatedFinishingDate = project.dateStarted.AddDays((((double)((int)Math.Truncate(totalTimeNeeded))) * 7) + ((int)((totalTimeNeeded - ((int)Math.Truncate(totalTimeNeeded))) * Math.Pow(10, 1))));
                 //Add more accurate no-working dates
@@ -179,6 +196,7 @@ namespace WPFTest
             }
             else
             {
+                //DateTime.MinValue is used a constant to identify that the project has no length, or a task is not priority
                 project.estimatedFinishingDate = DateTime.MinValue;
             }
 
@@ -187,10 +205,17 @@ namespace WPFTest
 
         public static void estimatedTaskFinishingDate(Task task)
         {
+            /*
+             * This method identifies the finishing date of a seperate task
+             */
             if (!areTimesLoaded)
             {
                 getTimes();
             }
+            /*
+            *Take the project length and divide it by the hours per week to get an estimation as to how many working weeks/days we need, then split it into the integer (week) and double (decimal day)
+            *parts and cast them both to integers - take this, add the amount of non-working days and add the total 'new days' to the estimated finishing date (start date + needed days + zero hour days)
+            */
             double totalTimeNeeded = (task.TaskLength / HoursPerWeek);
             task.EstimatedFinishingDate = task.StartDate.AddDays((((double)((int)Math.Truncate(totalTimeNeeded))) * 7) + ((int)((totalTimeNeeded - ((int)Math.Truncate(totalTimeNeeded))) * Math.Pow(10, 1))));
             //Add more accurate no-working dates
@@ -199,6 +224,9 @@ namespace WPFTest
 
         public static bool areTimesLoaded
         {
+            /*
+             * This method returns true/false if a database connection has already been made to load working hours
+             */
             get
             {
                 if (HoursPerWeek != 0)
@@ -214,21 +242,25 @@ namespace WPFTest
 
         private static void getTimes()
         {
-            string username = LoginHandler.username;
-            if (username == null)
+            /*
+             *Attempts to load a user's working times from the database
+             */
+            if (LoginHandler.username == null)
             {
                 MessageBox.Show("Cannot get working times as not logged in"); 
             } else
             {
-                DatabaseHandler.getWorkingHours(username);
+                DatabaseHandler.getWorkingHours(LoginHandler.username);
             }
         }
 
        public static void checkTaskComplete(Task task)
         {
-            bool updated = false;
+            /*
+             * This method takes a task and identifies if its estimated finishing date is today or has passed, and if so removes it from the task list and prompts the user to update
+             */
             //If the task's finishing date is today or previously (and the task was not started today)
-            if ((task.EstimatedFinishingDate >= DateTime.Now) && task.EstimatedFinishingDate.ToShortDateString() != task.StartDate.ToShortDateString())
+            if ((task.EstimatedFinishingDate >= DateTime.Now) && (task.EstimatedFinishingDate.ToShortDateString() != task.StartDate.ToShortDateString()))
             {
                 foreach (Project project in ModelView.projectList)
                 {
@@ -236,19 +268,18 @@ namespace WPFTest
                     {
                         Trace.WriteLine("Removed task: " + task.TaskName + " from " + project.x.ToString());
                         project.taskList.Remove(task);
-                        updated = true;
+                        increaseTaskPriorities(project);
+                        MessageBox.Show("Tasks have been automatically removed and cleaned - please update");
                     }
-                }
-                if (updated)
-                {
-                    MessageBox.Show("Tasks have been automatically removed and cleaned - please update");
-                    updated = false;
                 }
             }
         }
-
+        
         private static void increaseTaskPriorities(Project project)
         {
+            /*
+             * Called if a task is removed their 'friends' must be updated to have higher priority locally and externally
+             */
             foreach (Task task in project.taskList)  
             {
                 int newPriority = (task.Priority -= 1);

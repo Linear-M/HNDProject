@@ -26,6 +26,9 @@ namespace WPFTest
 
         private void btnSaveHours_Click(object sender, RoutedEventArgs e)
         {
+            /*
+             * This event handler binds the form information to variables and calls the database to add new working hours to the current user's profile
+             */
             double mondayHours = Convert.ToDouble(txtMonday.Text.ToString());
             double tuesdayHours = Convert.ToDouble(txtTuesday.Text.ToString());
             double wednesdayHours = Convert.ToDouble(txtWednesday.Text.ToString());

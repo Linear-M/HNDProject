@@ -26,6 +26,9 @@ namespace WPFTest
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            /*
+             * If the login button is clicked (and the login works) hide the login button a bit and un-hide-ish the logout button
+             */
             DatabaseHandler.login(txtUsername.Text.ToString(), txtPassword.Password.ToString());
             if (LoginHandler.loggedIn)
             {
@@ -37,6 +40,9 @@ namespace WPFTest
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
+            /*
+             * If the logout button is clicked, log out the user, hide the logout button a bit and un-hide-ish the login button
+             */
             LoginHandler.logout();
             btnLogin.Opacity = 1;
             btnLogout.Opacity = 0.5;

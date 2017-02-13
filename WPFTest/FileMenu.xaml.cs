@@ -41,8 +41,8 @@ namespace WPFTest
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            DateTime prjDueDate;
             
+            DateTime prjDueDate;
             try
             {
                 //Obtain new project data
@@ -51,7 +51,6 @@ namespace WPFTest
                 double projectLength = Convert.ToDouble(txtProjectLength.Text.ToString());
                 prjDueDate = dpkrProjectStartDate.SelectedDate.Value.Date;
                 DateTime startDate = DateTime.Now.Date;
-
                 //Move the data to the model
                 DatabaseHandler.addNewProject("Ben", prjName, prjDescription, projectLength, startDate, prjDueDate);
 
@@ -70,6 +69,7 @@ namespace WPFTest
 
         private void btnTaskView_Click(object sender, RoutedEventArgs e)
         {
+            //Open a new task menu window
             TaskMenu tskMenu = new TaskMenu();
             tskMenu.Show();
         }

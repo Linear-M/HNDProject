@@ -31,10 +31,9 @@ namespace WPFTest
             InitializeComponent();
         }
 
-        
-
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            //Open the file menu
             FileMenu fmenu = new FileMenu();
             fmenu.Show();
         }
@@ -43,8 +42,10 @@ namespace WPFTest
         {
             if (LoginHandler.loggedIn)
             {
+                //Show the please wait screen
                 PleaseWait plsw = new PleaseWait();
                 plsw.Show();
+
                 Forms.Integration.WindowsFormsHost host = new Forms.Integration.WindowsFormsHost();
 
                 // Add the chart to the Windows Form Host.
@@ -58,7 +59,7 @@ namespace WPFTest
                 wfhTest.Child.MouseMove += Child_MouseMove;
                 wfhTest.Child.MouseClick += Child_MouseClick;
 
-                //Gen tasks
+                //Generate tasks for the projectlist
                 ModelView.generateTaskCharts("Task Name", "Hours Left");
                 plsw.Close();
             } else
@@ -67,22 +68,27 @@ namespace WPFTest
                 Login frmLogin = new Login();
                 frmLogin.Show();
                 */
-
+                //Show the login form first
                 LoginHandler.loggedIn = true;
                 LoginHandler.username = "Ben";
                 LoginHandler.password = "password";
+                LoginHandler.email = "benpople@outlook.com";
             }
 
         }
 
         private void Child_MouseClick(object sender, Forms.MouseEventArgs e)
         {
+            //Remove any old event handlers to save a lot of memory
             wfhTest.Child.MouseMove -= Child_MouseMove;
             wfhTest.Child.MouseClick -= Child_MouseClick;
 
+            //Cast chart object to the child of windows forms host to generate an object for the current chart
             Chart currChart = (Chart)wfhTest.Child;
+
             Forms.Integration.WindowsFormsHost host = new Forms.Integration.WindowsFormsHost();
 
+            //Generate the new chart (do we have to generate the task chart or project chart (or stay the same)
             Chart newChart = ModelView.manageBarClicking(currChart.HitTest(e.X, e.Y), currChart);
 
             //If no DP was clicked ModelView.manageBarClicking returns the same chart
@@ -101,6 +107,8 @@ namespace WPFTest
                     MessageBox.Show("No tasks found");
                 }
             }
+
+            //Add new event handlers (this is why it was important to remove the old ones, they still take up space - a lot of it - and do not work when the child is modified)
             wfhTest.Child.MouseMove += Child_MouseMove;
             wfhTest.Child.MouseClick += Child_MouseClick;
         }
@@ -108,30 +116,35 @@ namespace WPFTest
 
         private void Child_MouseMove(object sender, Forms.MouseEventArgs e)
         {
+            //Whenever the mouse moves whilst on the chart control
             ModelView.manageBarHighlighting(((Chart)wfhTest.Child).HitTest(e.X, e.Y), (Chart)wfhTest.Child);
         }
 
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            //Show login menu
             Login frmLogin = new Login();
             frmLogin.Show();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            //Show profile/hours menu
             Window1 profile = new Window1();
             profile.Show();
         }
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
+            //Send email TODO change
             EMail em = new EMail();
             em.sendEmail(ModelView.emailBody());
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            //If the form is closing, cancel the form close and instead move to taskbar
             e.Cancel = true;
             this.Hide();
             taskbarIcon.Visibility = Visibility.Visible;
@@ -140,12 +153,14 @@ namespace WPFTest
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
+            //If the 'show' menu item was selected from the taskbar show the form and hide the taskbar icon
             this.Show();
             taskbarIcon.Visibility = Visibility.Hidden;
         }
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
+            //If the 'exit' menu was selected from the taskbar force shutdown the app
             Application.Current.Shutdown();
         }
     }

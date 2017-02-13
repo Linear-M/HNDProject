@@ -21,32 +21,33 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="198*" />
+            <ColumnDefinition Width="199*" />
+            <ColumnDefinition Width="178*" />
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="199*" />
         </Grid.ColumnDefinitions>
 
         <Button Click="Button_Click" Content="Main Menu" Grid.Row="1" Grid.Column="0" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}" BorderThickness="0"/>
         <Button Click="Button_Click_1" Content="Settings" Grid.Row="1" Grid.Column="1" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}" BorderThickness="0"/>
-        <Button Click="Button_Click_1" Content="Login Options" Grid.Row="1" Grid.Column="2" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}" BorderThickness="0"/>
-        <Button Click="Button_Click_1" Content="Profile" Grid.Row="1" Grid.Column="3" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}" BorderThickness="0"/>
-        <TextBox x:Name="txtProjectName" HorizontalAlignment="Left" Height="40" Margin="20,80,0,0" TextWrapping="Wrap" Text="Project Name" VerticalAlignment="Top" Width="574" Grid.ColumnSpan="3" TextChanged="textBox_TextChanged" FontFamily="Arial" FontSize="18" Background="#FF009EE8" BorderThickness="2" BorderBrush="{x:Null}" Foreground="White"/>
-        <TextBox x:Name="txtProjectDescription" HorizontalAlignment="Left" Height="40" Margin="20,140,0,0" TextWrapping="Wrap" Text="Project Description" VerticalAlignment="Top" Width="574" Grid.ColumnSpan="3" FontFamily="Arial" FontSize="18" Background="#FF009EE8" BorderThickness="2" BorderBrush="{x:Null}" Foreground="White"/>
-        <TextBox x:Name="txtProjectLength" HorizontalAlignment="Left" Height="40" Margin="20,205,0,0" TextWrapping="Wrap" Text="Project Length (Minutes)" VerticalAlignment="Top" Width="574" Grid.ColumnSpan="3" FontFamily="Arial" FontSize="18" Background="#FF009EE8" BorderThickness="2" BorderBrush="{x:Null}" Foreground="White"/>
-        <Calendar x:Name="fileMenuCalander" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Height="168" Width="178" Grid.Column="3"/>
-        <Button x:Name="btnSave" Content="Save" Grid.Column="3" HorizontalAlignment="Left" Margin="9,267,0,0" VerticalAlignment="Top" Width="178" Background="#FF5C63F5" Height="40" Click="btnSave_Click" Foreground="White"/>
-        <Button x:Name="btnTaskView" Content="Switch to Task Menu" HorizontalAlignment="Left" Margin="20,11,0,0" VerticalAlignment="Top" Width="762" Background="#FF5C63F5" Height="60" Click="btnTaskView_Click" Grid.ColumnSpan="4" FontSize="24" BorderBrush="{x:Null}" BorderThickness="0" Foreground="White"/>
-        <DatePicker x:Name="dpkrProjectStartDate" Margin="20,267,1,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Height="40" Background="#FF009EE8" RenderTransformOrigin="0.497,1.175" Text="Select a Project Start Date" Foreground="White"/>
+        <Button Click="Button_Click_1" Content="Login Options" Grid.Row="1" Grid.Column="2" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}" BorderThickness="0" Grid.ColumnSpan="2"/>
+        <Button Click="Button_Click_1" Content="Profile" Grid.Row="1" Grid.Column="4" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}" BorderThickness="0"/>
+        <TextBox x:Name="txtProjectName" HorizontalAlignment="Left" Height="40" Margin="20,80,0,0" TextWrapping="Wrap" Text="Project Name" VerticalAlignment="Top" Width="574" Grid.ColumnSpan="4" TextChanged="textBox_TextChanged" FontFamily="Arial" FontSize="18" Background="#FF009EE8" BorderThickness="2" BorderBrush="{x:Null}" Foreground="White"/>
+        <TextBox x:Name="txtProjectDescription" HorizontalAlignment="Left" Height="40" Margin="20,140,0,0" TextWrapping="Wrap" Text="Project Description" VerticalAlignment="Top" Width="574" Grid.ColumnSpan="4" FontFamily="Arial" FontSize="18" Background="#FF009EE8" BorderThickness="2" BorderBrush="{x:Null}" Foreground="White"/>
+        <TextBox x:Name="txtProjectLength" HorizontalAlignment="Left" Height="40" Margin="20,205,0,0" TextWrapping="Wrap" Text="Project Length (Minutes)" VerticalAlignment="Top" Width="574" Grid.ColumnSpan="4" FontFamily="Arial" FontSize="18" Background="#FF009EE8" BorderThickness="2" BorderBrush="{x:Null}" Foreground="White"/>
+        <Calendar x:Name="fileMenuCalander" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Height="168" Width="178" Grid.Column="4"/>
+        <Button x:Name="btnSave" Content="Save" Grid.Column="4" HorizontalAlignment="Left" Margin="9,267,0,0" VerticalAlignment="Top" Width="178" Background="#FF5C63F5" Height="40" Click="btnSave_Click" Foreground="White"/>
+        <Button x:Name="btnTaskView" Content="Switch to Task Menu" HorizontalAlignment="Left" Margin="20,11,0,0" VerticalAlignment="Top" Width="762" Background="#FF5C63F5" Height="60" Click="btnTaskView_Click" Grid.ColumnSpan="5" FontSize="24" BorderBrush="{x:Null}" BorderThickness="0" Foreground="White"/>
+        <DatePicker x:Name="dpkrProjectStartDate" Margin="20,267,1,0" VerticalAlignment="Top" Grid.ColumnSpan="4" Height="40" Background="#FF009EE8" RenderTransformOrigin="0.497,1.175" Text="Select a Project Start Date" Foreground="White"/>
 
-        
+
 
     </Grid>
 

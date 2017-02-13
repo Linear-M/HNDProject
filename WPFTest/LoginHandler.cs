@@ -8,6 +8,7 @@ namespace WPFTest
 {
     class LoginHandler
     {
+        //Many encapsulated variables
         private static string _username, _password, _email;
         private static bool _loggedIn = false;
 
@@ -57,6 +58,9 @@ namespace WPFTest
 
         public static void logout()
         {
+            /*
+             * Clear the stored username, password and email as well as setting the program to 'not-logged-in' mode
+             */
             username = "";
             password = "";
             email = "";

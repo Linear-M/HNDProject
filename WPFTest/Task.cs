@@ -8,6 +8,7 @@ namespace WPFTest
 {
     class Task
     {
+        //Encapsulated variables
         private string _TaskName, _TaskDescription;
         private double _TaskLength;
         private DateTime _EstimatedFinishingDate, _StartDate;
@@ -106,12 +107,13 @@ namespace WPFTest
 
         public Task(string name, double length, string description, int priority, int projectID, int taskID, DateTime startDate)
         {
+            //Constructor for the task object
             TaskName = name;
             TaskDescription = description;
             TaskLength = length;
             Priority = priority;
             TaskID = taskID;
-            //If the project is currently ON
+            //If this is the first task
             if (startDate != DateTime.MinValue)
             {
                 StartDate = startDate;
