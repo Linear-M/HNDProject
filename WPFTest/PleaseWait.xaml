@@ -4,7 +4,7 @@
         Title="MainWindow" Height="100" Width="200"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="#FE339EC6"
+        Background="Transparent"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         >

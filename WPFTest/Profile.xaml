@@ -6,17 +6,25 @@
         xmlns:local="clr-namespace:WPFTest"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Profile Options" Height="120" Width="758" Background="#FE339EC6">
+        Title="Profile Options" Height="120" Width="758" Background="LightSkyBlue">
     <Window.Resources>
         <Style TargetType="Label">
-            <Setter Property="Foreground" Value="LightBlue" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="LightSkyBlue" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="14" />
         </Style>
     </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -29,7 +37,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Button x:Name="btnSaveHours" Grid.Row="0" Grid.Column="0" Margin="5" Background="#FF2563EA" BorderBrush="{x:Null}" Content="Save" Foreground="White" FontWeight="Bold" FontFamily="Arial" Click="btnSaveHours_Click" Opacity="0.75"></Button>
+        <Button x:Name="btnSaveHours" Grid.Row="0" Grid.Column="0" Background="#FF5C63F5" BorderBrush="{x:Null}" Content="Save" Foreground="White" Click="btnSaveHours_Click"></Button>
 
         <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">Monday</Label>
         <Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">Tuesday</Label>
@@ -41,12 +49,12 @@
 
         <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">Hours Worked</Label>
 
-        <TextBox x:Name="txtMonday" Grid.Row="1" Grid.Column="1" Margin="10" Background="#FE339EC6" BorderBrush="LightBlue" Foreground="White" VerticalAlignment="Center" />
-        <TextBox x:Name="txtTuesday" Grid.Row="1" Grid.Column="2" Margin="10" Background="#FE339EC6" BorderBrush="LightBlue" Foreground="White" VerticalAlignment="Center" />
-        <TextBox x:Name="txtWednesday" Grid.Row="1" Grid.Column="3" Margin="10" Background="#FE339EC6" BorderBrush="LightBlue" Foreground="White" VerticalAlignment="Center" />
-        <TextBox x:Name="txtThursday" Grid.Row="1" Grid.Column="4" Margin="10" Background="#FE339EC6" BorderBrush="LightBlue" Foreground="White" VerticalAlignment="Center" />
-        <TextBox x:Name="txtFriday" Grid.Row="1" Grid.Column="5" Margin="10" Background="#FE339EC6" BorderBrush="LightBlue" Foreground="White" VerticalAlignment="Center" />
-        <TextBox x:Name="txtSaturday" Grid.Row="1" Grid.Column="6" Margin="10" Background="#FE339EC6" BorderBrush="LightBlue" Foreground="White" VerticalAlignment="Center" />
-        <TextBox x:Name="txtSunday" Grid.Row="1" Grid.Column="7" Margin="10" Background="#FE339EC6" BorderBrush="LightBlue" Foreground="White" VerticalAlignment="Center" />
+        <TextBox x:Name="txtMonday" Grid.Row="1" Grid.Column="1"/>
+        <TextBox x:Name="txtTuesday" Grid.Row="1" Grid.Column="2"/>
+        <TextBox x:Name="txtWednesday" Grid.Row="1" Grid.Column="3"/>
+        <TextBox x:Name="txtThursday" Grid.Row="1" Grid.Column="4"/>
+        <TextBox x:Name="txtFriday" Grid.Row="1" Grid.Column="5"/>
+        <TextBox x:Name="txtSaturday" Grid.Row="1" Grid.Column="6"/>
+        <TextBox x:Name="txtSunday" Grid.Row="1" Grid.Column="7"/>
     </Grid>
 </Window>

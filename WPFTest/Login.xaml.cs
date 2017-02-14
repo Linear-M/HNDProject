@@ -27,25 +27,61 @@ namespace WPFTest
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             /*
-             * If the login button is clicked (and the login works) hide the login button a bit and un-hide-ish the logout button
+             * Log the user in based on their information and change opacity
              */
             DatabaseHandler.login(txtUsername.Text.ToString(), txtPassword.Password.ToString());
-            if (LoginHandler.loggedIn)
-            {
-                btnLogout.Opacity = 1;
-                btnLogin.Opacity = 0.5;
-                Close();
-            }
+            checkOpacity();
+            checkEnabled();
         }
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
             /*
-             * If the logout button is clicked, log out the user, hide the logout button a bit and un-hide-ish the login button
+             * Log the user out and change opacity
              */
             LoginHandler.logout();
-            btnLogin.Opacity = 1;
-            btnLogout.Opacity = 0.5;
+            checkOpacity();
+            checkEnabled();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Check opacity on each load of the login form
+            checkOpacity();
+            checkEnabled();
+        }
+
+        private void checkOpacity()
+        {
+            /*
+             * Changes logout/login button opacity based on login status
+             */
+            if (LoginHandler.loggedIn)
+            {
+                btnLogout.Opacity = 1;
+                btnLogin.Opacity = 0.5;
+            }
+            else
+            {
+                btnLogin.Opacity = 1;
+                btnLogout.Opacity = 0.5;
+            }
+        }
+
+        private void checkEnabled()
+        {
+            /*
+             * Makes relevant login/logout buttons clickable or not dependant on if the user is logged in
+             */
+            if (LoginHandler.loggedIn)
+            {
+                btnLogin.IsEnabled = false;
+                btnLogout.IsEnabled = true;
+            } else
+            {
+                btnLogout.IsEnabled = false;
+                btnLogin.IsEnabled = true;
+            }
         }
     }
 }

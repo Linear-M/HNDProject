@@ -141,17 +141,16 @@
 
             <Border Grid.RowSpan="5" Grid.Column="0" Background="#FF009EE8" BorderBrush="White" BorderThickness="0,0,2,0"></Border>
 
-            <Border Grid.Row="0" Grid.Column="0" BorderBrush="White" BorderThickness="0,2,0,0"/>
+            
             <Border Grid.Row="0" Grid.ColumnSpan="2" BorderBrush="White" BorderThickness="0,0,0,2"/>
             <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="White" BorderThickness="0,0,0,2"/>
             <Border Grid.Row="2" Grid.ColumnSpan="2" BorderBrush="White" BorderThickness="0,0,0,2"/>
-            <Border Grid.Row="3" Grid.ColumnSpan="2" BorderBrush="White" BorderThickness="0,0,0,2"/>
+            
 
             <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">Task Name</Label>
             <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">Task Description</Label>
             <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">Task Length</Label>
             <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">Project Selection</Label>
-            <Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">Priority</Label>
 
             <TextBox x:Name="txtTaskName" Grid.Row="0" Grid.Column="1" Background="LightSkyBlue" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="24" BorderBrush="White" BorderThickness="0,0,0,2">
                 Please Enter the Task Name
@@ -164,7 +163,7 @@
             </TextBox>
             <ComboBox Name="cmbProjectSelector" Grid.Row="3" Grid.Column="1" Background="LightSkyBlue" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24"
                       IsEditable="True" Text="Please Select a Project" MouseEnter="cmbProjectSelector_MouseEnter" BorderBrush="White" BorderThickness="0,0,0,2"/>
-            <Button Name="btnSaveTask" Grid.Row="5" Grid.ColumnSpan="2" Background="#FF5C63F5" BorderBrush="White" BorderThickness="0,1,0,0" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="btnSaveTask_Click">
+            <Button Name="btnSaveTask" Grid.Row="4" Grid.ColumnSpan="2" Background="#FF5C63F5" BorderBrush="White" BorderThickness="0,1,0,0" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="btnSaveTask_Click">
                 Save New Task
             </Button>
             

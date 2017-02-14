@@ -333,6 +333,7 @@ namespace WPFTest
             if (cb.Text.ToString() == "Please Select a Project")
             {
                 cb.Items.Clear();
+                //ProjectList is an ArrayList of Project objects where project.x is the project name
                 if (projectList.Count != 0)
                 {
                     foreach (Project project in projectList)

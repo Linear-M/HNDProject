@@ -26,11 +26,12 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Button ToolTip="hey" Click="Button_Click_3" Content="Project and Task Management" Grid.Row="0" Grid.Column="0" BorderBrush="{x:Null}" Background="#FF5C63F5" Foreground="White" BorderThickness="3,0,0,0"/>
-        <Button Content="Settings" Grid.Row="0" Grid.Column="1" Click="Button_Click_4" BorderBrush="{x:Null}" Background="#FF5C63F5" Foreground="White" BorderThickness="3,0,0,0"/>
-        <Button Content="Login Options" Grid.Row="0" Grid.Column="2" Click="Button_Click" BorderBrush="{x:Null}" Background="#FF5C63F5" Foreground="White" BorderThickness="3,0,0,0"/>
-        <Button Content="Profile" Grid.Row="0" Grid.Column="3" Click="Button_Click_1" BorderBrush="{x:Null}" Background="#FF5C63F5" Foreground="White" BorderThickness="3,0,0,0"/>
-        <Button Click="Button_Click_2" Content="Update" Grid.Row="0" Grid.Column="5" BorderBrush="{x:Null}" Background="#FF5C63F5" Foreground="White" BorderThickness="3,0,0,0"/>
+        <Button Click="Button_Click_3" Content="Project and Task Management" Grid.Row="0" Grid.Column="0" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}"/>
+        <Button Content="Settings" Grid.Row="0" Grid.Column="1" Click="Button_Click_4" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}"/>
+        <Button Content="Login Options" Grid.Row="0" Grid.Column="2" Click="Button_Click" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}"/>
+        <Button Content="Profile" Grid.Row="0" Grid.Column="3" Click="Button_Click_1" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}"/>
+        <Button Click="Button_Click_2" Content="Update" Grid.Row="0" Grid.Column="5" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}"/>
+        
         <WindowsFormsHost x:Name="wfhTest" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="5">
             <WinForms:FlowLayoutPanel/>
         </WindowsFormsHost>

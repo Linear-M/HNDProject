@@ -48,11 +48,10 @@ namespace WPFTest
                 //Obtain new project data
                 string prjName = txtProjectName.Text;
                 string prjDescription = txtProjectDescription.Text;
-                double projectLength = Convert.ToDouble(txtProjectLength.Text.ToString());
                 prjDueDate = dpkrProjectStartDate.SelectedDate.Value.Date;
                 DateTime startDate = DateTime.Now.Date;
                 //Move the data to the model
-                DatabaseHandler.addNewProject("Ben", prjName, prjDescription, projectLength, startDate, prjDueDate);
+                DatabaseHandler.addNewProject("Ben", prjName, prjDescription, startDate, prjDueDate);
 
             }
             catch (Exception)

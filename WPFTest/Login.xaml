@@ -6,12 +6,21 @@
         xmlns:local="clr-namespace:WPFTest"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Login" Height="160" Width="840" Background="#FE339EC6">
+        Title="Login" Height="150" Width="500" Background="LightSkyBlue" Loaded="Window_Loaded">
     <Grid>
-        <TextBox x:Name="txtUsername" HorizontalAlignment="Center" Height="42" Margin="25,10,434,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Width="375" FontFamily="Arial" FontSize="18" Background="#FF6ABBFF" BorderThickness="2" BorderBrush="{x:Null}" TextAlignment="Center"/>
-        <Button x:Name="btnLogin" Content="Login" HorizontalAlignment="Left" Margin="405,10,0,0" VerticalAlignment="Top" Width="385" Background="#FF3E9DDE" Height="42" Click="btnLogin_Click"/>
-        <Button x:Name="btnLogout" Content="Logout" HorizontalAlignment="Left" Margin="405,68,0,0" VerticalAlignment="Top" Width="385" Background="#FF3E9DDE" Height="42" Opacity="0.5" Click="btnLogout_Click"/>
-        <PasswordBox x:Name="txtPassword" HorizontalAlignment="Left" Margin="25,68,0,0" VerticalAlignment="Top" Width="365" Height="42" FontFamily="Arial" FontSize="18" Background="#FF6ABBFF" BorderThickness="2" BorderBrush="{x:Null}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBox x:Name="txtUsername" Grid.Row="0" Grid.Column="0" Background="Transparent" Foreground="White" Text="Username" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderThickness="0"/>
+        <Button x:Name="btnLogin" Grid.Row="0" Grid.Column="1" Content="Login" Background="#FF5C63F5" Foreground="White" Click="btnLogin_Click" BorderThickness="0"/>
+        <Button x:Name="btnLogout" Grid.Row="1" Grid.Column="1" Content="Logout" Background="#FF5C63F5" Foreground="White" Opacity="0.5" Click="btnLogout_Click" BorderThickness="0"/>
+        <PasswordBox x:Name="txtPassword" Grid.Row="1" Grid.Column="0" Background="Transparent" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0" Password="password"/>
 
     </Grid>
 </Window>

@@ -16,7 +16,7 @@ namespace WPFTest
         static OleDbConnection Conn = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0; Data Source=ScheduleDatabase.accdb;");
         static OleDbCommand command;
 
-        public static void addNewProject(string Username, string ProjectName, string ProjectDescription, double ProjectLength, DateTime DateStarted, DateTime prjDueDate)
+        public static void addNewProject(string Username, string ProjectName, string ProjectDescription, DateTime DateStarted, DateTime prjDueDate)
         {
             //Generate SQL (with params) and populate the commmand object
             string SQL = "INSERT INTO tblproject(Username,ProjectName,ProjectDescription,ProjectLength,DateStarted,DateDue) VALUES(@UN,@PN,@PD,@PL,@DS,@DD)";
@@ -27,7 +27,7 @@ namespace WPFTest
                 command.Parameters.AddWithValue("@UN", Username);
                 command.Parameters.AddWithValue("@PN", ProjectName);
                 command.Parameters.AddWithValue("@PD", ProjectDescription);
-                command.Parameters.AddWithValue("@PL", ProjectLength);
+                command.Parameters.AddWithValue("@PL", 0);
                 command.Parameters.AddWithValue("@DS", ConvertToDateFormatAccessLikes(DateStarted));
                 command.Parameters.AddWithValue("@DD", ConvertToDateFormatAccessLikes(prjDueDate));
             }
@@ -150,7 +150,7 @@ namespace WPFTest
                 else
                 {
                     //Output incorrect entry
-                    MessageBox.Show("Incorrect Credentials - Try Again - " + username + " - " + password);
+                    MessageBox.Show("Incorrect Credentials - Try Again");
                     LoginHandler.loggedIn = false;
                     Conn.Close();
                 }
