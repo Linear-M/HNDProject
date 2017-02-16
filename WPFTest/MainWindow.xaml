@@ -9,7 +9,7 @@
         xmlns:WindowsFormsIntegration="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
         mc:Ignorable="d"
-        Title="Better Project" Height="900" Width="1800" Background="LightSkyBlue" Closing="Window_Closing"
+        Title="Better Project" Height="900" Width="1800" Background="LightSkyBlue" Closing="Window_Closing" Loaded="Window_Loaded"
         >
 
 

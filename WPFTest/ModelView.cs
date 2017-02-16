@@ -73,6 +73,14 @@ namespace WPFTest
                     TimeHandler.estimatedTaskFinishingDate(task);
                 }
             }
+
+            //Run email handler now projects are loaded
+            if (LoginHandler.shouldSendEMail)
+            {
+                EMail email = new EMail();
+                email.sendEmail(emailBody());
+                LoginHandler.shouldSendEMail = false;
+            }
         }
 
         private static void purgeProjects()
@@ -105,6 +113,7 @@ namespace WPFTest
                     //Change the bar to make it seem highlighted (cross-hatch and lighter colour than the bar itself)
                     point.Color = ColorTranslator.FromHtml("#0077af");
                 }
+
                 //Draw labels
                 DataPoint currPoint = getHoveredPoint(result, usedChart);
 
@@ -432,6 +441,23 @@ namespace WPFTest
             return body;
         }
 
+        public static string generateBaloonMessage()
+        {
+            //Return an informational message with the first-priority project and task, if none are available nudge the user to open the app and add projects/tasks
+            string returnString = "Another hour has passed, are you still working on (Project: Task):";
+            foreach (Project project in projectList)
+            {
+                foreach (Task task in project.taskList)
+                {
+                    if (task.StartDate != DateTime.MinValue)
+                    {
+                        returnString += Environment.NewLine + project.x + ": " + task.TaskName;
+                        return returnString;
+                    }
+                }
+            }
+            return "Make sure you have enough projects and tasks to work on - open the app!";
+        }
 
         public static void removeLabels(Chart chart)
         {

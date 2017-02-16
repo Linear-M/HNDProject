@@ -293,5 +293,14 @@ namespace WPFTest
             DatabaseHandler.updateProjectLength(project.ID);
             Trace.WriteLine(project.x + "'s tasks have been updated - database successfully updated with " + project.taskList.Count.ToString() + " new task priorities");
         }
+
+        public static bool shouldSendEmail()
+        {
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -1,23 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Windows.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms.DataVisualization.Charting;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Diagnostics;
 using Forms = System.Windows.Forms;
-
+using System.Windows.Input;
 
 namespace WPFTest
 {
@@ -163,5 +150,21 @@ namespace WPFTest
             //If the 'exit' menu was selected from the taskbar force shutdown the app
             Application.Current.Shutdown();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //When the program is launched greate a dispatchertimer to generate a notification every two hours
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(2, 0, 0);
+            dispatcherTimer.Start();
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            //On the two hour tick, show a notification on the taskbar with a procedurally generated message
+            taskbarIcon.ShowBalloonTip("Better Project Notification", ModelView.generateBaloonMessage(), Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+        }
+
     }
 }

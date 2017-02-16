@@ -128,6 +128,9 @@ namespace WPFTest
                     LoginHandler.username = username;
                     LoginHandler.password = password;
                     LoginHandler.loggedIn = true;
+                    LoginHandler.shouldSendEMail = TimeHandler.shouldSendEmail();
+                    
+                    //Close database connection
                     Conn.Close();
 
                     //Select their email (based on username) and save it      

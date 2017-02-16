@@ -11,6 +11,7 @@ namespace WPFTest
         //Many encapsulated variables
         private static string _username, _password, _email;
         private static bool _loggedIn = false;
+        private static bool _shouldSendEMail = false;
 
         public static string username
         {
@@ -53,6 +54,17 @@ namespace WPFTest
             set
             {
                 _loggedIn = value;
+            }
+        }
+        public static bool shouldSendEMail
+        {
+            get
+            {
+                return _shouldSendEMail;
+            }
+            set
+            {
+                _shouldSendEMail = value;
             }
         }
 
