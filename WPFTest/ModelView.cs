@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
-
+using System.Windows.Threading;
 
 namespace WPFTest
 {
@@ -458,6 +458,8 @@ namespace WPFTest
             }
             return "Make sure you have enough projects and tasks to work on - open the app!";
         }
+
+
 
         public static void removeLabels(Chart chart)
         {

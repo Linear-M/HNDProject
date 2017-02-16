@@ -154,6 +154,12 @@ namespace WPFTest
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //When the program is launched greate a dispatchertimer to generate a notification every two hours
+            createTimerEngine();
+        }
+
+        private void createTimerEngine()
+        {
+            //Create the dispatcher timer and give it the tick event handler, time span for the tick and start it
             DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(2, 0, 0);
