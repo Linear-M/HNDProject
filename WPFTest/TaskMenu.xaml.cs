@@ -21,7 +21,26 @@ namespace WPFTest
     {
         public TaskMenu()
         {
-            InitializeComponent();
+            //Check there are projects in the constructor
+            if ((ModelView.projectList.Count == 0) || LoginHandler.loggedIn == false)
+            {
+                //Due to windows weirdisms, the form has to first open before we can force-close
+                MessageBox.Show("Please log in first, there are no projects to add tasks to!");
+                InitializeComponent();
+                this.Close();
+            }
+            else
+            {
+                InitializeComponent();
+                leftBorder.Background = UI.leftBorderColor;
+                leftLabel1.FontFamily = UI.xmlFont;
+                leftLabel1.FontSize = 12;
+                leftLabel2.FontFamily = UI.xmlFont;
+                leftLabel2.FontSize = 12;
+                leftLabel3.FontFamily = UI.xmlFont;
+                leftLabel2.FontSize = 12;
+                this.Show();
+            }
         }
 
         private void cmbProjectSelector_MouseEnter(object sender, MouseEventArgs e)
@@ -56,7 +75,7 @@ namespace WPFTest
             }
             else
             {
-                DatabaseHandler.addNewTask(taskName, taskDescription, taskLength, projectID, priority);
+                DatabaseHandler.addNewTask(taskName, taskDescription, taskLength, projectID, priority, TimeHandler.estimatedTaskStartDate(projectID));
             }
         }
     }

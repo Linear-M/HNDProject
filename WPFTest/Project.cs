@@ -11,7 +11,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace WPFTest
 {
-    class Project
+    public class Project
     {
         //Encapsulated variables
         private ArrayList tasks = new ArrayList();

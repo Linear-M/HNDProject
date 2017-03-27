@@ -22,6 +22,10 @@ namespace WPFTest
         public Window1()
         {
             InitializeComponent();
+            Background = UI.leftBorderColor;
+            btnSaveHours.Background = UI.dataPointColourXml;
+
+            populateHours();
         }
 
         private void btnSaveHours_Click(object sender, RoutedEventArgs e)
@@ -38,7 +42,26 @@ namespace WPFTest
             double sundayHours = Convert.ToDouble(txtSunday.Text.ToString());
 
             DatabaseHandler.addHoursToProfile(mondayHours, tuesdayHours, wednesdayHours, thursdayHours, fridayHours, saturdayHours, sundayHours, LoginHandler.username);
+        }
 
+        private void populateHours()
+        {
+            if (LoginHandler.loggedIn)
+            {
+                this.Show();
+                txtMonday.Text = TimeHandler.Monday.ToString();
+                txtTuesday.Text = TimeHandler.Tuesday.ToString();
+                txtWednesday.Text = TimeHandler.Wednesday.ToString();
+                txtThursday.Text = TimeHandler.Thursday.ToString();
+                txtFriday.Text = TimeHandler.Friday.ToString();
+                txtSaturday.Text = TimeHandler.Saturday.ToString();
+                txtSunday.Text = TimeHandler.Sunday.ToString();
+            }
+            else
+            {
+                MessageBox.Show("Please log in");
+                this.Close();
+            }
         }
     }
 }

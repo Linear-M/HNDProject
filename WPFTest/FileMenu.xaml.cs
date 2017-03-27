@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,26 @@ namespace WPFTest
     {
         public FileMenu()
         {
-            InitializeComponent();
+            //Check there are projects in the constructor
+            if (LoginHandler.loggedIn == false)
+            {
+                //Due to windows weirdisms, the form has to first open before we can force-close
+                MessageBox.Show("Please log in first!");
+                InitializeComponent();
+                this.Close();
+            }
+            else
+            {
+                InitializeComponent();
+                leftBorder.Background = UI.leftBorderColor;
+                leftLabel1.FontFamily = UI.xmlFont;
+                leftLabel1.FontSize = 12;
+                leftLabel2.FontFamily = UI.xmlFont;
+                leftLabel2.FontSize = 12;
+                leftLabel3.FontFamily = UI.xmlFont;
+                leftLabel2.FontSize = 12;
+                this.Show();
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -48,7 +68,7 @@ namespace WPFTest
                 //Obtain new project data
                 string prjName = txtProjectName.Text;
                 string prjDescription = txtProjectDescription.Text;
-                prjDueDate = dpkrProjectStartDate.SelectedDate.Value.Date;
+                prjDueDate = Convert.ToDateTime(txtDatePicker.Text);
                 DateTime startDate = DateTime.Now.Date;
                 //Move the data to the model
                 DatabaseHandler.addNewProject("Ben", prjName, prjDescription, startDate, prjDueDate);
@@ -58,11 +78,6 @@ namespace WPFTest
             {
                 MessageBox.Show("Error creating new project - incorrect data entry");
             }
-
-        }
-
-        private void PART_TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
 
         }
 

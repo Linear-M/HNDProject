@@ -6,6 +6,9 @@ using System.Linq;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
 using System.Windows.Threading;
+using System.Drawing.Text;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace WPFTest
 {
@@ -13,6 +16,7 @@ namespace WPFTest
     {
         //Encapsulated variables
         private static ArrayList projList = new ArrayList();
+        private static Project _currentProject;
 
         public static ArrayList projectList
         {
@@ -23,6 +27,14 @@ namespace WPFTest
             set
             {
                 projList = value;
+            }
+        }
+
+        public static Project currentProject
+        {
+            get
+            {
+                return _currentProject;
             }
         }
 
@@ -138,10 +150,12 @@ namespace WPFTest
                                         currPoint.Label = "Task Name: " + task.TaskName + Environment.NewLine + "EFT: " + task.EstimatedFinishingDate.ToShortDateString();
                                     } else
                                     {
+                                        //MessageBox.Show(task.EstimatedFinishingDate.ToShortDateString());
                                         currPoint.Label = "Task Name: " + task.TaskName + Environment.NewLine + "No EFT as Not Priority";
                                     }
                                     //Add a tooltip to the datapoint
-                                    currPoint.ToolTip = task.TaskDescription + Environment.NewLine + "Priority: " + task.Priority.ToString();
+                                    currPoint.ToolTip = task.TaskDescription + Environment.NewLine + "Priority: " + task.Priority.ToString() + Environment.NewLine
+                                        + "ID: " + task.ProjectID;
                                 }
                             }
                         }
@@ -154,7 +168,7 @@ namespace WPFTest
                         {
                             if (project.x == currPoint.AxisLabel)
                             {
-                                currPoint.Label = "Project Name: " + project.x.ToString() +
+                                currPoint.Label = "Project List: " + project.x.ToString() +
                                     Environment.NewLine +
                                     "Date Project Started: " + project.dateStarted.ToShortDateString() +
                                     Environment.NewLine +
@@ -187,9 +201,9 @@ namespace WPFTest
             //Check to see if we are in task view (not project view) and if so return a new project chart
             if (usedChart.ChartAreas[0].AxisX.Title == "Task Name")
             {
-                return projectChartGenerator("Project Name", "Hours Left");
+                return projectChartGenerator("Project List", "Hours Left");
             //If we're in project view (and we need to generate a task view) find the project that has been clicked and either return null (no point clicked), usedChart (same) or the new task chart
-            } else if (usedChart.ChartAreas[0].AxisX.Title == "Project Name")
+            } else if (usedChart.ChartAreas[0].AxisX.Title == "Project List")
             {
                 foreach (Project project in projectList)
                 {
@@ -204,6 +218,7 @@ namespace WPFTest
                             }
                             else
                             {
+                                _currentProject = project;
                                 return project.taskChart;
                             }
                         }
@@ -231,13 +246,15 @@ namespace WPFTest
 
             ArrayList projectList = ModelView.projectList;
 
-            // Initialize the Chart object
+            // Initialize the Chart and color objects
             Chart Chart1 = new Chart();
-            Chart1.BackColor = Color.LightSkyBlue;
+            Font chartTitleFont = new Font(UI.fontCollection.Families[0], 28);
+            Font chartLabelFont = new Font(UI.fontCollection.Families[0], 14);
+            Chart1.BackColor = UI.chartColour;
 
             // Add a chart area.
             Chart1.ChartAreas.Add("Default");
-            Chart1.ChartAreas["Default"].BackColor = Color.LightSkyBlue;
+            Chart1.ChartAreas["Default"].BackColor = UI.chartColour;
             Chart1.ChartAreas["Default"].AxisX.Title = xAxisTitle.ToString();
             Chart1.ChartAreas["Default"].AxisY.Title = yAxisTitle.ToString();
 
@@ -255,11 +272,20 @@ namespace WPFTest
             //Add the series to the chart and format any labelling
             Chart1.Series.Add(series);
             Chart1.Series[0]["LabelStyle"] = "Bottom";
+            Chart1.ChartAreas["Default"].AxisX.TitleFont = chartTitleFont;
+            Chart1.ChartAreas["Default"].AxisY.TitleFont = chartTitleFont;
+            Chart1.ChartAreas["Default"].AxisX.LabelStyle.Font = chartLabelFont;
+            Chart1.ChartAreas["Default"].AxisY.LabelStyle.Font = chartLabelFont;
 
+            //Change series colour
             foreach (Series s in Chart1.Series)
             {
-                s.Color = ColorTranslator.FromHtml("#009ee8");
+                s.Color = UI.dataPointColour;
             }
+
+            //Change series shadows
+            Chart1.Series[0].ShadowColor = UI.dataPointColour;
+            Chart1.Series[0].ShadowOffset = 10;
 
             return Chart1;
         }
@@ -271,11 +297,13 @@ namespace WPFTest
              */
             // Initialize the Chart object
             Chart Chart1 = new Chart();
-            Chart1.BackColor = Color.LightSkyBlue;
+            Font chartTitleFont = new Font(UI.fontCollection.Families[0], 28);
+            Font chartLabelFont = new Font(UI.fontCollection.Families[0], 14);
+            Chart1.BackColor = UI.chartColour;
 
             // Add a chart area.
             Chart1.ChartAreas.Add("Default");
-            Chart1.ChartAreas["Default"].BackColor = Color.LightSkyBlue;
+            Chart1.ChartAreas["Default"].BackColor = UI.chartColour;
             Chart1.ChartAreas["Default"].AxisX.Title = xAxisTitle.ToString();
             Chart1.ChartAreas["Default"].AxisY.Title = yAxisTitle.ToString();
 
@@ -291,13 +319,23 @@ namespace WPFTest
                 series.Points.AddXY(task.TaskName, task.TaskLength);
             }
 
+            //Add the series to the chart and format any labelling
             Chart1.Series.Add(series);
             Chart1.Series[0]["LabelStyle"] = "Bottom";
+            Chart1.ChartAreas["Default"].AxisX.TitleFont = chartTitleFont;
+            Chart1.ChartAreas["Default"].AxisY.TitleFont = chartTitleFont;
+            Chart1.ChartAreas["Default"].AxisX.LabelStyle.Font = chartLabelFont;
+            Chart1.ChartAreas["Default"].AxisY.LabelStyle.Font = chartLabelFont;
 
+            //Change series colour
             foreach (Series s in Chart1.Series)
             {
-                s.Color = Color.DeepSkyBlue;
+                s.Color = UI.dataPointColour;
             }
+
+            //Change series shadows
+            Chart1.Series[0].ShadowColor = UI.dataPointColour;
+            Chart1.Series[0].ShadowOffset = 10;
 
             project.taskChart = Chart1;
         }
@@ -310,10 +348,18 @@ namespace WPFTest
              */
             Array projList = projectList.ToArray();
 
+            //Update starting dates and charts
             foreach (Project p in projList)
             {
                 taskChartGenerator("Task Name", "Hours Left", p);
+
+                foreach (Task task in p.taskList)
+                {
+                    DatabaseHandler.updateTaskStartTime(task, TimeHandler.estimatedTaskStartDateUpdated(task));
+                }
             }
+
+
 
             //Convert the array and reinstantiate the project list
             projectList = new ArrayList(projList);
@@ -342,7 +388,7 @@ namespace WPFTest
             if (cb.Text.ToString() == "Please Select a Project")
             {
                 cb.Items.Clear();
-                //ProjectList is an ArrayList of Project objects where project.x is the project name
+                //ProjectList is an ArrayList of Project objects where project.x is the Project List
                 if (projectList.Count != 0)
                 {
                     foreach (Project project in projectList)
@@ -403,7 +449,7 @@ namespace WPFTest
 
             body += "<p>Here's a list of your projects:</p>";
 
-            body += "<table><tr><th>Project Name</th><th>Project Length</th></tr>";
+            body += "<table><tr><th>Project List</th><th>Project Length</th></tr>";
 
             foreach (Project project in projectList)
             {
@@ -417,7 +463,7 @@ namespace WPFTest
 
             foreach (Project project in projectList)
             {
-                body += "<table><tr><th>Project Name</th><th>Task Name</th><th>Task Length (Hours)</th><th>Notes</th></tr>";
+                body += "<table><tr><th>Project List</th><th>Task Name</th><th>Task Length (Hours)</th><th>Notes</th></tr>";
                 foreach (Task task in project.taskList)
                 {
                     //If the task's estimated finishing date is within a fortnight
@@ -459,7 +505,19 @@ namespace WPFTest
             return "Make sure you have enough projects and tasks to work on - open the app!";
         }
 
-
+        public static DateTime taskLastFinishing(Project project)
+        {
+            //Returns an estimated finishing date based on task timing
+            DateTime finishDate = DateTime.MinValue;
+            foreach (Task task in project.taskList)
+            {
+                if (task.EstimatedFinishingDate > finishDate)
+                {
+                    finishDate = task.EstimatedFinishingDate;
+                }
+            }
+            return finishDate;
+        }
 
         public static void removeLabels(Chart chart)
         {
@@ -469,6 +527,8 @@ namespace WPFTest
                 dp.Label = "";
             }
         }
+
+        
 
     }
 }

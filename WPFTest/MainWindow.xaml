@@ -9,7 +9,8 @@
         xmlns:WindowsFormsIntegration="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
         mc:Ignorable="d"
-        Title="Better Project" Height="900" Width="1800" Background="LightSkyBlue" Closing="Window_Closing" Loaded="Window_Loaded"
+        Title="Better Project" Height="900" Width="1800" Background="#eaf2ff" Closing="Window_Closing" Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen"
         >
 
 
@@ -26,12 +27,25 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Button Click="Button_Click_3" Content="Project and Task Management" Grid.Row="0" Grid.Column="0" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}"/>
-        <Button Content="Settings" Grid.Row="0" Grid.Column="1" Click="Button_Click_4" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}"/>
-        <Button Content="Login Options" Grid.Row="0" Grid.Column="2" Click="Button_Click" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}"/>
-        <Button Content="Profile" Grid.Row="0" Grid.Column="3" Click="Button_Click_1" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}"/>
-        <Button Click="Button_Click_2" Content="Update" Grid.Row="0" Grid.Column="5" Background="#FF5C63F5" Foreground="White" BorderBrush="{x:Null}"/>
-        
+        <Menu Grid.Row="0" Grid.ColumnSpan="5">
+            <MenuItem Header="File">
+                <MenuItem Header="Add New Project" HorizontalAlignment="Left" Width="175" Click="Button_Click_3"/>
+                <MenuItem Header="Add New Task" HorizontalAlignment="Left" Width="175" Click="MenuItem_Click_2"/>
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Edit Project" HorizontalAlignment="Left" Width="175"/>
+                <MenuItem Header="Edit Task" HorizontalAlignment="Left" Width="175"/>
+                <MenuItem Header="Change Working Hours" HorizontalAlignment="Left" Width="210" Click="MenuItem_Click_3"/>
+            </MenuItem>
+            <MenuItem Header="Profile">
+                <MenuItem Header="Login" HorizontalAlignment="Left" Width="175" Click="MenuItem_Click_4"/>
+                <MenuItem Header="Admin__Debug__Login" HorizontalAlignment="Left" Width="200" Click="MenuItem_Click_5"/>
+                <MenuItem Header="Admin__Test__MySQL" HorizontalAlignment="Left" Width="200" Click="MenuItem_Click_6"/>
+            </MenuItem>
+            <MenuItem Header="Refresh" Click="Button_Click_2"/>
+            <MenuItem Header="Ganttify" Click="MenuItem_Click_7"/>
+        </Menu>
+
         <WindowsFormsHost x:Name="wfhTest" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="5">
             <WinForms:FlowLayoutPanel/>
         </WindowsFormsHost>
@@ -55,7 +69,7 @@
                 </ContextMenu>
                 </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
-            
+
     </Grid>
 
 

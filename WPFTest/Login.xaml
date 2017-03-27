@@ -17,10 +17,10 @@
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="txtUsername" Grid.Row="0" Grid.Column="0" Background="Transparent" Foreground="White" Text="Username" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderThickness="0"/>
-        <Button x:Name="btnLogin" Grid.Row="0" Grid.Column="1" Content="Login" Background="#FF5C63F5" Foreground="White" Click="btnLogin_Click" BorderThickness="0"/>
-        <Button x:Name="btnLogout" Grid.Row="1" Grid.Column="1" Content="Logout" Background="#FF5C63F5" Foreground="White" Opacity="0.5" Click="btnLogout_Click" BorderThickness="0"/>
-        <PasswordBox x:Name="txtPassword" Grid.Row="1" Grid.Column="0" Background="Transparent" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0" Password="password"/>
+        <TextBox x:Name="txtUsername" Grid.Row="0" Grid.Column="0" Background="White" Foreground="Black" Text="Username" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderThickness="0"/>
+        <Button x:Name="btnLogin" Grid.Row="0" Grid.Column="1" Content="Login" Background="#FF009EE8" Foreground="White" Click="btnLogin_Click" BorderThickness="0"/>
+        <Button x:Name="btnLogout" Grid.Row="1" Grid.Column="1" Content="Logout" Background="#FF009EE8" Foreground="White" Opacity="0.5" Click="btnLogout_Click" BorderThickness="0"/>
+        <PasswordBox x:Name="txtPassword" Grid.Row="1" Grid.Column="0" Background="White" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0" Password="password"/>
 
     </Grid>
 </Window>

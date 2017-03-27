@@ -105,7 +105,7 @@ namespace WPFTest
             }
         }
 
-        public Task(string name, double length, string description, int priority, int projectID, int taskID, DateTime startDate)
+        public Task(string name, double length, string description, int priority, int projectID, int taskID, DateTime startDate, int projID)
         {
             //Constructor for the task object
             TaskName = name;
@@ -113,6 +113,7 @@ namespace WPFTest
             TaskLength = length;
             Priority = priority;
             TaskID = taskID;
+            ProjectID = projID;
             //If this is the first task
             if (startDate != DateTime.MinValue)
             {

@@ -1,33 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
+using MySql.Data;
+using MySql.Data.MySqlClient;
 
 namespace WPFTest
 {
     class DatabaseHandler
     {
         //Generate the connection and command objects
-        static OleDbConnection Conn = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0; Data Source=ScheduleDatabase.accdb;");
-        static OleDbCommand command;
+        private static DatabaseConnection DbConnection = new DatabaseConnection();
+        private static MySqlConnection Conn = DbConnection.Connection;
+        private static MySqlCommand command;
 
         public static void addNewProject(string Username, string ProjectName, string ProjectDescription, DateTime DateStarted, DateTime prjDueDate)
         {
             //Generate SQL (with params) and populate the commmand object
             string SQL = "INSERT INTO tblproject(Username,ProjectName,ProjectDescription,ProjectLength,DateStarted,DateDue) VALUES(@UN,@PN,@PD,@PL,@DS,@DD)";
-            command = new OleDbCommand(SQL, Conn);
+            command = new MySqlCommand(SQL, Conn);
             try
             {
                 //Add the paramater values to the command objects
                 command.Parameters.AddWithValue("@UN", Username);
                 command.Parameters.AddWithValue("@PN", ProjectName);
                 command.Parameters.AddWithValue("@PD", ProjectDescription);
-                command.Parameters.AddWithValue("@PL", 0);
+                command.Parameters.AddWithValue("@PL", 1);
                 command.Parameters.AddWithValue("@DS", ConvertToDateFormatAccessLikes(DateStarted));
                 command.Parameters.AddWithValue("@DD", ConvertToDateFormatAccessLikes(prjDueDate));
             }
@@ -56,7 +58,7 @@ namespace WPFTest
         {
             //This SQL/connection retruns all relevant project information(s) for the currently logged-in user
             string SQL = "SELECT ProjectID, ProjectName, ProjectDescription, DateStarted, DateDue, ProjectLength FROM tblProject WHERE Username='" + username + "'";
-            OleDbCommand command = new OleDbCommand(SQL, Conn);
+            MySqlCommand command = new MySqlCommand(SQL, Conn);
 
             //If a connection is already opened (error check) close it first
             if (Conn.State == System.Data.ConnectionState.Open)
@@ -66,7 +68,7 @@ namespace WPFTest
             Conn.Open();
 
             //Create reader object that 'scans' the SQL return
-            OleDbDataReader newReader = command.ExecuteReader();
+            MySqlDataReader newReader = command.ExecuteReader();
 
             //While there is information stored in the connection buffer, add the projects (as data points/bars) to the chart
             while (newReader.Read())
@@ -115,11 +117,11 @@ namespace WPFTest
             {
                 //Return number of records with the username and password fields (1 for profile exist/correct combination, 0 for erroneous input or no profile saved)
                 string sql = "SELECT COUNT(*) FROM tblUser WHERE Username='" + username + "' and Password='" + password + "'";
-                command = new OleDbCommand(sql, Conn);
+                command = new MySqlCommand(sql, Conn);
 
                 Conn.Open();
 
-                int result = (int)command.ExecuteScalar();
+                int result = Convert.ToInt32(command.ExecuteScalar());
 
                 if (result > 0)
                 {
@@ -135,11 +137,11 @@ namespace WPFTest
 
                     //Select their email (based on username) and save it      
                     sql = "SELECT EMail FROM tblUser WHERE Username='" + username + "'";
-                    command = new OleDbCommand(sql, Conn);
+                    command = new MySqlCommand(sql, Conn);
 
                     Conn.Open();
 
-                    OleDbDataReader newReader = command.ExecuteReader();
+                    MySqlDataReader newReader = command.ExecuteReader();
 
                     //If there is information stored in the connection buffer, save the email
                     while (newReader.Read())
@@ -167,7 +169,7 @@ namespace WPFTest
              */ 
             string SQL = "UPDATE tblUser SET MondayHours = @MH, TuesdayHours = @TH, WednesdayHours = @WH, ThursdayHours = @THH, FridayHours = @FH, SaturdayHours = @SS, SundayHours = @SUH WHERE Username = @UNAME";
             //Create command
-            command = new OleDbCommand(SQL, Conn);
+            command = new MySqlCommand(SQL, Conn);
             try
             {
                 //Add param values
@@ -205,7 +207,7 @@ namespace WPFTest
         {
             //This SQL/connection retruns all relevant project information(s) for the currently logged-in user
             string SQL = "SELECT MondayHours,TuesdayHours,WednesdayHours,ThursdayHours,FridayHours,SaturdayHours,SundayHours FROM tblUser WHERE Username='" + username + "'";
-            OleDbCommand command = new OleDbCommand(SQL, Conn);
+            MySqlCommand command = new MySqlCommand(SQL, Conn);
 
             try
             {
@@ -215,7 +217,7 @@ namespace WPFTest
                     Conn.Close();
                 }
                 Conn.Open();
-                OleDbDataReader newReader = command.ExecuteReader();
+                MySqlDataReader newReader = command.ExecuteReader();
 
                 //While there is information stored in the connection buffer, add the time data to the timehandler class
                 while (newReader.Read())
@@ -239,15 +241,15 @@ namespace WPFTest
         public static void loadNewTasks(Project project)
         {
             //SQL grabs the needed information to display task information, based on the clicked project
-            string SQL = "SELECT TaskID, TaskName, TaskDescription, TaskLength, Priority, StartDate FROM tblTask WHERE ProjectID=" + project.ID + "";
-            OleDbCommand command = new OleDbCommand(SQL, Conn);
+            string SQL = "SELECT TaskID, ProjectID, TaskName, TaskDescription, TaskLength, Priority, StartDate FROM tblTask WHERE ProjectID=" + project.ID + "";
+            MySqlCommand command = new MySqlCommand(SQL, Conn);
             //If a connection is open close it
             if (Conn.State == System.Data.ConnectionState.Open)
             {
                 Conn.Close();
             }
             Conn.Open();
-            OleDbDataReader newReader = command.ExecuteReader();
+            MySqlDataReader newReader = command.ExecuteReader();
             
             //if the project has tasks
             if (newReader.HasRows)
@@ -260,6 +262,7 @@ namespace WPFTest
                     string description = newReader["TaskDescription"].ToString();
                     int priority = Convert.ToInt32(newReader["Priority"].ToString());
                     int taskID = Convert.ToInt32(newReader["TaskID"].ToString());
+                    int projectID = Convert.ToInt32(newReader["ProjectID"].ToString());
                     DateTime dateStarted;
                     try
                     {
@@ -274,7 +277,7 @@ namespace WPFTest
                         dateStarted = DateTime.MinValue;
                     }
                     //Add a new task object to the projec iteraion's task list
-                    project.taskList.Add(new Task(xPoint, yPoint, description, priority, project.ID, taskID, dateStarted));
+                    project.taskList.Add(new Task(xPoint, yPoint, description, priority, project.ID, taskID, dateStarted, projectID));
                 }
             }
             Conn.Close();
@@ -287,7 +290,7 @@ namespace WPFTest
              */
             string SQL = "INSERT INTO tblTask(TaskName, TaskDescription, TaskLength, ProjectID, Priority) VALUES(@TN,@TD,@TL,@PID,@PR)";
             //Fill the command object
-            command = new OleDbCommand(SQL, Conn);
+            command = new MySqlCommand(SQL, Conn);
             try
             {
                 //Add SQL param values
@@ -329,7 +332,7 @@ namespace WPFTest
              */ 
             string SQL = "INSERT INTO tblTask(TaskName, TaskDescription, TaskLength, ProjectID, Priority, StartDate) VALUES(@TN,@TD,@TL,@PID,@PR,@SD)";
             //Populate command object
-            command = new OleDbCommand(SQL, Conn);
+            command = new MySqlCommand(SQL, Conn);
             try
             {
                 //Add SQL param values
@@ -403,7 +406,7 @@ namespace WPFTest
             {
                 string SQL = "UPDATE tblProject SET ProjectLength = @LENGTH WHERE ProjectID = @PID";
                 //Populate command object
-                command = new OleDbCommand(SQL, Conn);
+                command = new MySqlCommand(SQL, Conn);
                 try
                 {
                     //Add SQL param values
@@ -431,8 +434,12 @@ namespace WPFTest
                 Conn.Close();
             } else
             {
-                MessageBox.Show("Project Length Updating failed - likely project does not exist");
-                Trace.WriteLine("ERROR UPDATING PROJECT HOURS");
+                //Is this just a new empty project
+                if (currProject.taskList.Count != 0)
+                {
+                    MessageBox.Show("Project Length Updating failed - likely project does not exist");
+                    Trace.WriteLine("ERROR UPDATING PROJECT HOURS");
+                }
             }
 
         }
@@ -448,7 +455,7 @@ namespace WPFTest
                 {
                     string SQL = "UPDATE tblTask SET Priority = @PRI WHERE ProjectID = @PID AND TaskID = @TSKID";
                     //Populate command object
-                    command = new OleDbCommand(SQL, Conn);
+                    command = new MySqlCommand(SQL, Conn);
                     try
                     {
                         //Add SQL param values
@@ -478,6 +485,42 @@ namespace WPFTest
                 }
 
             }
+        }
+
+        public static void updateTaskStartTime(Task task, DateTime newStartTime)
+        {
+            /*
+             * Calculates and updates a tasks's start date
+             */
+            string SQL = "UPDATE tblTask SET StartDate = @SD WHERE TaskID = @TID";
+            //Create command
+            command = new MySqlCommand(SQL, Conn);
+            try
+            {
+                //Add param values
+                command.Parameters.AddWithValue("@SD", newStartTime);
+                command.Parameters.AddWithValue("@TID", task.TaskID);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Failed to bind information to SQL variables");
+            }
+
+            /*Open the connection and execute the insert-into command. This method will return the number of rows that have been affected (in this case, added)
+            therefore, if affectedRows>0, insertion has been completed successfully*/
+            Conn.Open();
+            if (command.ExecuteNonQuery() > 0)
+            {
+                Console.WriteLine("Updated task start time");
+                MessageBox.Show("Beep");
+            }
+            else
+            {
+                //If the code gets this far, it means that there has not been an in-code syntax error, instead a data entry error (v.likely to be user-related)
+                MessageBox.Show("Task start time updating failed");
+            }
+            //Close the connection to reduce resource usage and prevent other changes to database from other users (and this software)
+            Conn.Close();
         }
 
         private static DateTime ConvertToDateFormatAccessLikes(DateTime d)

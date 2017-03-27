@@ -302,5 +302,63 @@ namespace WPFTest
             }
             return false;
         }
+
+        public static DateTime estimatedTaskStartDate(int projectID)
+        {
+            //Calculate the start date for a new task
+            foreach (Project project in ModelView.projectList)
+            {
+                if (project.ID == projectID)
+                {
+                    int priority = 0;
+                    foreach (Task task in project.taskList)
+                    {
+                        if (task.Priority > priority)
+                        {
+                            priority = task.Priority;
+                        }
+                    }
+                    foreach (Task task in project.taskList)
+                    {
+                        if (task.Priority == priority)
+                        {
+                            return task.EstimatedFinishingDate;
+                        }
+                    }
+                }
+            }
+            return DateTime.MinValue;
+        }
+
+        public static DateTime estimatedTaskStartDateUpdated(Task task)
+        {
+            /*
+             * This method returns a estimated task start date for a task based upon the task's priority
+             */
+            int priority = task.Priority;
+            foreach (Project project in ModelView.projectList)
+            {
+                //For each project check if it's the project we want, and then go through each of its tasks and sort its start date
+                if (project.ID == task.ProjectID)
+                {
+                    foreach (Task t in project.taskList)
+                    {
+                        if (priority == 2 && t.Priority == 1)
+                        {
+                            return t.EstimatedFinishingDate;
+                        }
+                        else if (priority == 1)
+                        {
+                            return task.StartDate;
+                        }
+                        else if (t.Priority == (priority - 1))
+                        {
+                            return t.EstimatedFinishingDate;
+                        }
+                    }
+                }
+            }
+            return DateTime.MinValue;
+        }
     }
 }

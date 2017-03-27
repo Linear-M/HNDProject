@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:WPFTest"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Project and Task Management" Height="400" Width="800" Background="LightSkyBlue">
+        Title="Project and Task Management" Height="400" Width="800" Background="white">
 
     <Window.Resources>
         <Style x:Key="styleDatePickerTextBox" TargetType="DatePickerTextBox">
@@ -179,7 +179,6 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -189,12 +188,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="0" Grid.Column="0" Background="#FF5C63F5" Foreground="White" Content="Main Menu" BorderBrush="{x:Null}" BorderThickness="0"></Button>
-        <Button Grid.Row="0" Grid.Column="1" Background="#FF5C63F5" Foreground="White" Content="Settings" BorderBrush="{x:Null}" BorderThickness="0"></Button>
-        <Button Grid.Row="0" Grid.Column="2" Background="#FF5C63F5" Foreground="White" Content="Login" BorderBrush="{x:Null}" BorderThickness="0"></Button>
-        <Button Grid.Row="0" Grid.Column="3" Background="#FF5C63F5" Foreground="White" Content="Profile" BorderBrush="{x:Null}" BorderThickness="0"></Button>
-
-        <Grid Grid.Row="1" Grid.ColumnSpan="4">
+        <Grid Grid.Row="0" Grid.ColumnSpan="4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
@@ -206,7 +200,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.RowSpan="3" Grid.Column="0" Background="#FF009EE8" BorderBrush="White" BorderThickness="0,0,2,0"></Border>
+            <Border Name="leftBorder" Grid.RowSpan="3" Grid.Column="0" BorderBrush="White" BorderThickness="0,0,2,0"></Border>
 
             <Border Grid.Row="0" Grid.ColumnSpan="2" BorderBrush="White" BorderThickness="0,0,0,2"/>
             <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="White" BorderThickness="0,0,0,2"/>
@@ -215,18 +209,17 @@
 
 
 
-            <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">Project Name</Label>
-            <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">Project Description</Label>
-            <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">Project Start Date</Label>
+            <Label Name="leftLabel1" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black">Project Name</Label>
+            <Label Name="leftLabel2" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black">Project Description</Label>
+            <Label Name="leftLabel3" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black">Project Start Date</Label>
 
-            <TextBox x:Name="txtProjectName" Grid.Row="0" Grid.Column="1" Background="LightSkyBlue" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="24" BorderBrush="White" BorderThickness="0,0,0,2">
+            <TextBox x:Name="txtProjectName" Grid.Row="0" Grid.Column="1" Background="White" Foreground="Black" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="24" BorderBrush="White" BorderThickness="0,0,0,2">
                 Please Enter the Project Name
             </TextBox>
-            <TextBox x:Name="txtProjectDescription" Grid.Row="1" Grid.Column="1" Background="LightSkyBlue" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="24" BorderBrush="White" BorderThickness="0,0,0,2">
+            <TextBox x:Name="txtProjectDescription" Grid.Row="1" Grid.Column="1" Background="White" Foreground="Black" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="24" BorderBrush="White" BorderThickness="0,0,0,2">
                 Please Enter the Project Description
             </TextBox>
-            <DatePicker x:Name="dpkrProjectStartDate" Grid.Row="2" Grid.Column="1" Background="LightSkyBlue" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource dpkrStyle}" Foreground="White"></DatePicker>
-
+            <TextBox x:Name="txtDatePicker" Grid.Row="2" Grid.Column="1" Background="White" Foreground="Black" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="24" BorderBrush="White" BorderThickness="0,0,0,2" Text="Please Enter the Project Start Date (DD/MM/YYYY)"/>
             <Grid Grid.Row="3" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -235,11 +228,8 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Name="btnSaveTask" Grid.Column="0" Background="#FF5C63F5" BorderBrush="White" BorderThickness="0,1,0,0" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="btnSave_Click">
+                <Button Name="btnSaveTask" Grid.ColumnSpan="2" Background="#FF009EE8" BorderBrush="White" BorderThickness="0,1,0,0" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="btnSave_Click">
                     Save New Project
-                </Button>
-                <Button Name="btnTaskView" Grid.Column="1" Background="#FF5C63F5" BorderBrush="White" BorderThickness="0,1,0,0" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="btnTaskView_Click">
-                    Open Task View
                 </Button>
             </Grid>
         </Grid>

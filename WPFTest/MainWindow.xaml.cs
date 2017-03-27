@@ -16,13 +16,13 @@ namespace WPFTest
         public MainWindow()
         {
             InitializeComponent();
+            UI.initialiseCustomFonts();
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            //Open the file menu
+            //Open the file menu, show is handled in constructor
             FileMenu fmenu = new FileMenu();
-            fmenu.Show();
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -37,7 +37,7 @@ namespace WPFTest
 
                 // Add the chart to the Windows Form Host.
                 ModelView.populateProjects(LoginHandler.username);
-                host.Child = ModelView.projectChartGenerator("Project Name", "Time Left (Hours)");
+                host.Child = ModelView.projectChartGenerator("Project List", "Time Left (Hours)");
 
                 // Add the chart to the grid so it can be displayed.
                 wfhTest.Child = host.Child;
@@ -48,20 +48,14 @@ namespace WPFTest
 
                 //Generate tasks for the projectlist
                 ModelView.generateTaskCharts("Task Name", "Hours Left");
+
                 plsw.Close();
-            } else
+            }
+            else
             {
-                /*
                 Login frmLogin = new Login();
                 frmLogin.Show();
-                */
-                //Show the login form first
-                LoginHandler.loggedIn = true;
-                LoginHandler.username = "Ben";
-                LoginHandler.password = "password";
-                LoginHandler.email = "benpople@outlook.com";
             }
-
         }
 
         private void Child_MouseClick(object sender, Forms.MouseEventArgs e)
@@ -105,21 +99,6 @@ namespace WPFTest
         {
             //Whenever the mouse moves whilst on the chart control
             ModelView.manageBarHighlighting(((Chart)wfhTest.Child).HitTest(e.X, e.Y), (Chart)wfhTest.Child);
-        }
-
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //Show login menu
-            Login frmLogin = new Login();
-            frmLogin.Show();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            //Show profile/hours menu
-            Window1 profile = new Window1();
-            profile.Show();
         }
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
@@ -172,5 +151,55 @@ namespace WPFTest
             taskbarIcon.ShowBalloonTip("Better Project Notification", ModelView.generateBaloonMessage(), Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
         }
 
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            /*
+             * Open task menu, less clutter than going through file/add new project menu, constructor handles show/hide
+             */
+                TaskMenu tskMenu = new TaskMenu();
+        }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        {
+            //Show profile/hours menu
+            Window1 profile = new Window1();
+        }
+
+        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
+        {
+            //Show login menu
+            Login frmLogin = new Login();
+            frmLogin.Show();
+        }
+
+        private void MenuItem_Click_5(object sender, RoutedEventArgs e)
+        {
+            //Show the login form first
+            LoginHandler.loggedIn = true;
+            LoginHandler.username = "Ben";
+            LoginHandler.password = "password";
+            LoginHandler.email = "benpople@outlook.com";
+        }
+
+        private void MenuItem_Click_6(object sender, RoutedEventArgs e)
+        {
+            //Check database connection
+            DatabaseConnection dbConn = new DatabaseConnection();
+            if (dbConn.IsConnected())
+            {
+                MessageBox.Show("Connection Success");
+            }
+            else
+            {
+                MessageBox.Show("Cannot connect");
+            }
+        
+        }
+
+        private void MenuItem_Click_7(object sender, RoutedEventArgs e)
+        {
+            //Gantt controller
+            GanttViewer gvw = new GanttViewer(ModelView.currentProject);
+        }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFTest"
         mc:Ignorable="d"
-        Title="Project and Task Management" Height="400" Width="800" Background="LightSkyBlue">
+        Title="Project and Task Management" Height="400" Width="800">
 
     <Window.Resources>
         <LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">
@@ -32,7 +32,7 @@
   Grid.Column="0"
   CornerRadius="2,0,0,2" 
   Margin="1" 
-  Background="LightSkyBlue" 
+  Background="White" 
   BorderThickness="0,0,1,0" />
                 <Path 
   x:Name="Arrow"
@@ -78,7 +78,7 @@
          Visibility="Visible"
                                      HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
-         IsReadOnly="{TemplateBinding IsReadOnly}" Foreground="White"/>
+         IsReadOnly="{TemplateBinding IsReadOnly}" Foreground="Black"/>
                             <Popup 
         Name="Popup"
         Placement="Bottom"
@@ -93,7 +93,7 @@
           MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                     <Border 
             x:Name="DropDownBorder"
-            Background="#FF5CBCF7"
+            Background="White"
             BorderThickness="1"/>
                                     <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
                                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
@@ -111,7 +111,6 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -121,10 +120,6 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="0" Grid.Column="0" Background="#FF5C63F5" Foreground="White" Content="Main Menu" BorderBrush="{x:Null}" BorderThickness="0"></Button>
-        <Button Grid.Row="0" Grid.Column="1" Background="#FF5C63F5" Foreground="White" Content="Settings" BorderBrush="{x:Null}" BorderThickness="0"></Button>
-        <Button Grid.Row="0" Grid.Column="2" Background="#FF5C63F5" Foreground="White" Content="Login" BorderBrush="{x:Null}" BorderThickness="0"></Button>
-        <Button Grid.Row="0" Grid.Column="3" Background="#FF5C63F5" Foreground="White" Content="Profile" BorderBrush="{x:Null}" BorderThickness="0"></Button>
 
         <Grid Grid.Row="1" Grid.ColumnSpan="4">
             <Grid.RowDefinitions>
@@ -139,7 +134,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.RowSpan="5" Grid.Column="0" Background="#FF009EE8" BorderBrush="White" BorderThickness="0,0,2,0"></Border>
+            <Border Name="leftBorder" Grid.RowSpan="5" Grid.Column="0" BorderBrush="White" BorderThickness="0,0,2,0"></Border>
 
             
             <Border Grid.Row="0" Grid.ColumnSpan="2" BorderBrush="White" BorderThickness="0,0,0,2"/>
@@ -147,23 +142,23 @@
             <Border Grid.Row="2" Grid.ColumnSpan="2" BorderBrush="White" BorderThickness="0,0,0,2"/>
             
 
-            <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">Task Name</Label>
-            <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">Task Description</Label>
-            <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">Task Length</Label>
-            <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">Project Selection</Label>
+            <Label Name="leftLabel1" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black">Task Name</Label>
+            <Label Name="leftLabel2" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black">Task Description</Label>
+            <Label Name="leftLabel3" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black">Task Length</Label>
+            <Label Name="leftLabel4" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black">Project Selection</Label>
 
-            <TextBox x:Name="txtTaskName" Grid.Row="0" Grid.Column="1" Background="LightSkyBlue" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="24" BorderBrush="White" BorderThickness="0,0,0,2">
+            <TextBox x:Name="txtTaskName" Grid.Row="0" Grid.Column="1" Foreground="Black" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="24" BorderBrush="White" BorderThickness="0,0,0,2">
                 Please Enter the Task Name
             </TextBox>
-            <TextBox x:Name="txtTaskDescription" Grid.Row="1" Grid.Column="1" Background="LightSkyBlue" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="24" BorderBrush="White" BorderThickness="0,0,0,2">
+            <TextBox x:Name="txtTaskDescription" Grid.Row="1" Grid.Column="1" Foreground="Black" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="24" BorderBrush="White" BorderThickness="0,0,0,2">
                 Please Enter the Task Description
             </TextBox>
-            <TextBox x:Name="txtTaskLength" Grid.Row="2" Grid.Column="1" Background="LightSkyBlue" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="24" BorderBrush="White" BorderThickness="0,0,0,2">
+            <TextBox x:Name="txtTaskLength" Grid.Row="2" Grid.Column="1" Foreground="Black" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="24" BorderBrush="White" BorderThickness="0,0,0,2">
                 Please Enter the Task Length in Hours
             </TextBox>
-            <ComboBox Name="cmbProjectSelector" Grid.Row="3" Grid.Column="1" Background="LightSkyBlue" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24"
+            <ComboBox Name="cmbProjectSelector" Grid.Row="3" Grid.Column="1" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24"
                       IsEditable="True" Text="Please Select a Project" MouseEnter="cmbProjectSelector_MouseEnter" BorderBrush="White" BorderThickness="0,0,0,2"/>
-            <Button Name="btnSaveTask" Grid.Row="4" Grid.ColumnSpan="2" Background="#FF5C63F5" BorderBrush="White" BorderThickness="0,1,0,0" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="btnSaveTask_Click">
+            <Button Name="btnSaveTask" Grid.Row="4" Grid.ColumnSpan="2" Background="#FF009EE8" BorderBrush="White" BorderThickness="0,1,0,0" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="btnSaveTask_Click">
                 Save New Task
             </Button>
             
