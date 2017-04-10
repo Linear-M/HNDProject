@@ -29,33 +29,42 @@ namespace WPFTest
         {
             if (LoginHandler.loggedIn)
             {
-                //Show the please wait screen
-                PleaseWait plsw = new PleaseWait();
-                plsw.Show();
-
-                Forms.Integration.WindowsFormsHost host = new Forms.Integration.WindowsFormsHost();
-
-                // Add the chart to the Windows Form Host.
-                ModelView.populateProjects(LoginHandler.username);
-                host.Child = ModelView.projectChartGenerator("Project List", "Time Left (Hours)");
-
-                // Add the chart to the grid so it can be displayed.
-                wfhTest.Child = host.Child;
-
-                //Bind the MouseMove and MouseClick handler
-                wfhTest.Child.MouseMove += Child_MouseMove;
-                wfhTest.Child.MouseClick += Child_MouseClick;
-
-                //Generate tasks for the projectlist
-                ModelView.generateTaskCharts("Task Name", "Hours Left");
-
-                plsw.Close();
+                refresh();
             }
             else
             {
                 Login frmLogin = new Login();
                 frmLogin.Show();
             }
+        }
+
+        private void refresh()
+        {
+            //Show the please wait screen and hide other boxes/buttons/etc
+            introLabel.Visibility = Visibility.Collapsed;
+
+
+            wfhTest.Visibility = Visibility.Visible;
+            PleaseWait plsw = new PleaseWait();
+            plsw.Show();
+
+            Forms.Integration.WindowsFormsHost host = new Forms.Integration.WindowsFormsHost();
+
+            // Add the chart to the Windows Form Host.
+            ModelView.populateProjects(LoginHandler.username);
+            host.Child = ModelView.projectChartGenerator("Project List", "Time Left (Hours)");
+
+            // Add the chart to the grid so it can be displayed.
+            wfhTest.Child = host.Child;
+
+            //Bind the MouseMove and MouseClick handler
+            wfhTest.Child.MouseMove += Child_MouseMove;
+            wfhTest.Child.MouseClick += Child_MouseClick;
+
+            //Generate tasks for the projectlist
+            ModelView.generateTaskCharts("Task Name", "Hours Left");
+
+            plsw.Close();
         }
 
         private void Child_MouseClick(object sender, Forms.MouseEventArgs e)
@@ -101,20 +110,12 @@ namespace WPFTest
             ModelView.manageBarHighlighting(((Chart)wfhTest.Child).HitTest(e.X, e.Y), (Chart)wfhTest.Child);
         }
 
-        private void Button_Click_4(object sender, RoutedEventArgs e)
-        {
-            //Send email TODO change
-            EMail em = new EMail();
-            em.sendEmail(ModelView.emailBody());
-        }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             //If the form is closing, cancel the form close and instead move to taskbar
             e.Cancel = true;
             this.Hide();
             taskbarIcon.Visibility = Visibility.Visible;
-            
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -141,7 +142,7 @@ namespace WPFTest
             //Create the dispatcher timer and give it the tick event handler, time span for the tick and start it
             DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(2, 0, 0);
+            dispatcherTimer.Interval = new TimeSpan(0, 30, 0);
             dispatcherTimer.Start();
         }
 
@@ -179,6 +180,9 @@ namespace WPFTest
             LoginHandler.username = "Ben";
             LoginHandler.password = "password";
             LoginHandler.email = "benpople@outlook.com";
+            introLabel.Visibility = Visibility.Collapsed;
+            wfhTest.Visibility = Visibility.Visible;
+            refresh();
         }
 
         private void MenuItem_Click_6(object sender, RoutedEventArgs e)
@@ -200,6 +204,67 @@ namespace WPFTest
         {
             //Gantt controller
             GanttViewer gvw = new GanttViewer(ModelView.currentProject);
+        }
+
+        private void MenuItem_Click_8(object sender, RoutedEventArgs e)
+        {
+            //Send email TODO change
+            EMail em = new EMail();
+            em.sendEMail(ModelView.emailBody());
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DatabaseHandler.addNewUser(txtUsername.Text, RegisterPassword.Password, txtFirstName.Text, txtSurname.Text, Convert.ToDateTime(txtDOB.Text), txtEmail.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unable to register - incorrect data entry");
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //Attempt login using credentials on pseudo-login (registration) window
+                DatabaseHandler.login(txtUsername.Text, RegisterPassword.Password);
+                if (LoginHandler.loggedIn)
+                {
+                    refresh();
+                    MessageBox.Show(LoginHandler.username);
+                }
+            }
+            catch (Exception)
+            {
+                //Show login menu
+                Login frmLogin = new Login();
+                frmLogin.Show();
+            }
+        }
+
+        private void MenuItem_Click_9(object sender, RoutedEventArgs e)
+        {
+            if (LoginHandler.loggedIn == true)
+            {
+                wfhTest.Visibility = Visibility.Hidden;
+                RegistrationGrid.Visibility = Visibility.Visible;
+                introLabel.Visibility = Visibility.Visible;
+                string loggingOutUser = LoginHandler.username;
+                LoginHandler.logout();
+                MessageBox.Show("Logout complete - bye " + loggingOutUser);
+            } else
+            {
+                MessageBox.Show("Not logged in");
+            }
+        }
+
+        private void MenuItem_Click_10(object sender, RoutedEventArgs e)
+        {
+            BarEditor BarEditior = new BarEditor();
+            BarEditior.Show();
         }
     }
 }

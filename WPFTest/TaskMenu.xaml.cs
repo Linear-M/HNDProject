@@ -46,7 +46,7 @@ namespace WPFTest
         private void cmbProjectSelector_MouseEnter(object sender, MouseEventArgs e)
         {
             //If a user hovers over the combo box handle this in the modelview
-            ModelView.taskListComboBoxHandler(cmbProjectSelector);
+            ModelView.projectListComboBoxHandler(cmbProjectSelector);
         }
 
         private void btnSaveTask_Click(object sender, RoutedEventArgs e)

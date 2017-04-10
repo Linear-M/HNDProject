@@ -110,6 +110,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BarEditor.xaml.cs">
+      <DependentUpon>BarEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DatabaseConnection.cs" />
     <Compile Include="DataClasses.cs" />
     <Compile Include="EMail.cs" />
@@ -132,6 +135,10 @@
     </Compile>
     <Compile Include="TimeHandler.cs" />
     <Compile Include="UI.cs" />
+    <Page Include="BarEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FileMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

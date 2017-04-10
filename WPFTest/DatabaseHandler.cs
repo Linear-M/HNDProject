@@ -30,8 +30,8 @@ namespace WPFTest
                 command.Parameters.AddWithValue("@PN", ProjectName);
                 command.Parameters.AddWithValue("@PD", ProjectDescription);
                 command.Parameters.AddWithValue("@PL", 1);
-                command.Parameters.AddWithValue("@DS", ConvertToDateFormatAccessLikes(DateStarted));
-                command.Parameters.AddWithValue("@DD", ConvertToDateFormatAccessLikes(prjDueDate));
+                command.Parameters.AddWithValue("@DS", TimeHandler.ConvertToAccessDateTime(DateStarted));
+                command.Parameters.AddWithValue("@DD", TimeHandler.ConvertToAccessDateTime(prjDueDate));
             }
             catch (Exception)
             {
@@ -43,12 +43,48 @@ namespace WPFTest
             Conn.Open();
             if (command.ExecuteNonQuery() > 0)
             {
-                MessageBox.Show("Hours updated");
+                MessageBox.Show("Project Added Successfuly");
             }
             else
             {
                 //If the code gets this far, it means that there has not been an in-code syntax error, instead a data entry error (v.likely to be user-related)
-                MessageBox.Show("New hours failed - check that all project criteria have a correct entry");
+                MessageBox.Show("New project failed - check that all project criteria have a correct entry");
+            }
+            //Close the connection to reduce resource usage and prevent other changes to database from other users (and this software)
+            Conn.Close();
+        }
+
+        public static void addNewUser(string Username, string Password, string FirstName, string Surname, DateTime DateOfBirth, string EMail)
+        {
+            //Generate SQL (with params) and populate the commmand object
+            string SQL = "INSERT INTO tbluser(Username, Password, FirstName, Surname, DateOfBirth, EMail) VALUES(@UN, @PW, @FN, @SN, @DOB, @EM)";
+            command = new MySqlCommand(SQL, Conn);
+            try
+            {
+                //Add the paramater values to the command objects
+                command.Parameters.AddWithValue("@UN", Username);
+                command.Parameters.AddWithValue("@PW", Password);
+                command.Parameters.AddWithValue("@FN", FirstName);
+                command.Parameters.AddWithValue("@SN", Surname);
+                command.Parameters.AddWithValue("@DOB", TimeHandler.ConvertToAccessDateTime(DateOfBirth));
+                command.Parameters.AddWithValue("@EM", EMail);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Failed to bind user information to SQL variables");
+            }
+
+            /*Open the connection and execute the insert-into command. This method will return the number of rows that have been affected (in this case, added)
+            therefore, if affectedRows>0, insertion has been completed successfully*/
+            Conn.Open();
+            if (command.ExecuteNonQuery() > 0)
+            {
+                MessageBox.Show("User Registered Successfuly");
+            }
+            else
+            {
+                //If the code gets this far, it means that there has not been an in-code syntax error, instead a data entry error (v.likely to be user-related)
+                MessageBox.Show("User registration failed - check that all project criteria have a correct entry");
             }
             //Close the connection to reduce resource usage and prevent other changes to database from other users (and this software)
             Conn.Close();
@@ -150,7 +186,6 @@ namespace WPFTest
                     }
 
                     Conn.Close();
-
                 }
                 else
                 {
@@ -198,6 +233,80 @@ namespace WPFTest
             {
                 //If the code gets this far, it means that there has not been an in-code syntax error, instead a data entry error (v.likely to be user-related)
                 MessageBox.Show("Hours addition failed - check that all criteria have a correct entry");
+            }
+            //Close the connection to reduce resource usage and prevent other changes to database from other users (and this software)
+            Conn.Close();
+        }
+
+        public static void editProject(string ProjectName, string ProjectDescription, DateTime StartDate, Project ProjectToEdit)
+        {
+            /*
+             * Takes new project information and syncs these changes to the database
+             */
+            string SQL = "UPDATE tblProject SET ProjectName = @PN, ProjectDescription = @PDN, DateStarted = @SD WHERE ProjectID = @PID";
+            //Create command
+            command = new MySqlCommand(SQL, Conn);
+            try
+            {
+                //Add param values
+                command.Parameters.AddWithValue("@PN", ProjectName);
+                command.Parameters.AddWithValue("@PDN", ProjectDescription);
+                command.Parameters.AddWithValue("@SD", TimeHandler.ConvertToAccessDateTime(StartDate));
+                command.Parameters.AddWithValue("@PID", ProjectToEdit.ID);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Failed to bind information to SQL variables");
+            }
+
+            /*Open the connection and execute the insert-into command. This method will return the number of rows that have been affected (in this case, added)
+            therefore, if affectedRows>0, insertion has been completed successfully*/
+            Conn.Open();
+            if (command.ExecuteNonQuery() > 0)
+            {
+                MessageBox.Show("Project information updated");
+            }
+            else
+            {
+                //If the code gets this far, it means that there has not been an in-code syntax error, instead a data entry error (v.likely to be user-related)
+                MessageBox.Show("Project edit failed - check that all criteria have a correct entry");
+            }
+            //Close the connection to reduce resource usage and prevent other changes to database from other users (and this software)
+            Conn.Close();
+        }
+
+        public static void editTask(string TaskName, string TaskDescription, int TaskLength, Task TaskToEdit)
+        {
+            /*
+             * Takes new task information and syncs these changes to the database
+             */
+            string SQL = "UPDATE tblTask SET TaskName = @TN, TaskDescription = @TDN, TaskLength = @TL WHERE TaskID = @TID";
+            //Create command
+            command = new MySqlCommand(SQL, Conn);
+            try
+            {
+                //Add param values
+                command.Parameters.AddWithValue("@TN", TaskName);
+                command.Parameters.AddWithValue("@TDN", TaskDescription);
+                command.Parameters.AddWithValue("@TL", TaskLength);
+                command.Parameters.AddWithValue("@TID", TaskToEdit.TaskID);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Failed to bind information to SQL variables");
+            }
+
+            /*Open the connection and execute the insert-into command. This method will return the number of rows that have been affected (in this case, added)
+            therefore, if affectedRows>0, insertion has been completed successfully*/
+            Conn.Open();
+            if (command.ExecuteNonQuery() > 0)
+            {
+                MessageBox.Show("Task information updated");
+            }
+            else
+            {
+                //If the code gets this far, it means that there has not been an in-code syntax error, instead a data entry error (v.likely to be user-related)
+                MessageBox.Show("Task edit failed - check that all criteria have a correct entry");
             }
             //Close the connection to reduce resource usage and prevent other changes to database from other users (and this software)
             Conn.Close();
@@ -341,7 +450,7 @@ namespace WPFTest
                 command.Parameters.AddWithValue("@TL", TaskLength);
                 command.Parameters.AddWithValue("@PID", ProjectID);
                 command.Parameters.AddWithValue("@PR", Priority);
-                command.Parameters.AddWithValue("@SD", ConvertToDateFormatAccessLikes(StartDate));
+                command.Parameters.AddWithValue("@SD", TimeHandler.ConvertToAccessDateTime(StartDate));
 
             }
             catch (Exception)
@@ -368,22 +477,6 @@ namespace WPFTest
             updateProjectLength(ProjectID);
         }
 
-        private static double getProjectHoursFromTasks(Project project)
-        {
-            /*
-             * This method takes a project and returns it's length (the length of all tasks within it combined) as database value may be lagging behind
-             */
-            double projectLength = 0;
-
-            //For each task in the project's task list add its length to projectLength and return it
-            foreach (Task task in project.taskList)
-            {
-                projectLength += task.TaskLength;
-            }
-
-            return projectLength;
-        }
-
         public static void updateProjectLength(int projectID)
         {   /*
              *This method takes a project's ID and updates that project's length in the database             
@@ -397,7 +490,7 @@ namespace WPFTest
                 if (project.ID == projectID)
                 {
                     currProject = project;
-                    projectLength = getProjectHoursFromTasks(project);
+                    projectLength = TimeHandler.getProjectHoursFromTasks(project);
                 }
             }
 
@@ -423,7 +516,7 @@ namespace WPFTest
                 Conn.Open();
                 if (command.ExecuteNonQuery() > 0)
                 {
-                    Trace.WriteLine("Updated project hours successfully");
+                    Trace.WriteLine("Updated project hours and length successfully");
                 }
                 else
                 {
@@ -511,8 +604,7 @@ namespace WPFTest
             Conn.Open();
             if (command.ExecuteNonQuery() > 0)
             {
-                Console.WriteLine("Updated task start time");
-                MessageBox.Show("Beep");
+                Trace.WriteLine("Updated task start time");
             }
             else
             {
@@ -522,13 +614,5 @@ namespace WPFTest
             //Close the connection to reduce resource usage and prevent other changes to database from other users (and this software)
             Conn.Close();
         }
-
-        private static DateTime ConvertToDateFormatAccessLikes(DateTime d)
-        {
-            //Will return dd/mm/yyyy OR dd/mm/yyyy hh:mm:ss, taking any datetime format and returning one that an access database will accept as date/time
-            return new DateTime(d.Year, d.Month, d.Day, d.Hour, d.Minute, d.Second);
-        }
-
-
     }
 }

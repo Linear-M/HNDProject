@@ -9,51 +9,76 @@
         xmlns:WindowsFormsIntegration="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
         mc:Ignorable="d"
-        Title="Better Project" Height="900" Width="1800" Background="#eaf2ff" Closing="Window_Closing" Loaded="Window_Loaded"
-        WindowStartupLocation="CenterScreen"
+        Title="Better Project" Height="900" Width="1600" Background="#eaf2ff" Closing="Window_Closing" Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen" Icon="icon.ico"
         >
 
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
 
-        <Menu Grid.Row="0" Grid.ColumnSpan="5">
+        <Menu Name="mainMenu" Grid.Row="0" FontFamily="/WPFTest;component/Resources/#Roboto Light" Background="#FFEAF2FF" FontSize="14">
             <MenuItem Header="File">
-                <MenuItem Header="Add New Project" HorizontalAlignment="Left" Width="175" Click="Button_Click_3"/>
-                <MenuItem Header="Add New Task" HorizontalAlignment="Left" Width="175" Click="MenuItem_Click_2"/>
+                <MenuItem Header="Add New Project" HorizontalAlignment="Left" Width="200" Click="Button_Click_3"/>
+                <MenuItem Header="Add New Task" HorizontalAlignment="Left" Width="200" Click="MenuItem_Click_2"/>
             </MenuItem>
             <MenuItem Header="Edit">
-                <MenuItem Header="Edit Project" HorizontalAlignment="Left" Width="175"/>
-                <MenuItem Header="Edit Task" HorizontalAlignment="Left" Width="175"/>
-                <MenuItem Header="Change Working Hours" HorizontalAlignment="Left" Width="210" Click="MenuItem_Click_3"/>
+                <MenuItem Header="Edit Project or Task" HorizontalAlignment="Left" Width="175" Click="MenuItem_Click_10"/>
+                <MenuItem Header="Change Working Hours" HorizontalAlignment="Left" Width="240" Click="MenuItem_Click_3"/>
             </MenuItem>
             <MenuItem Header="Profile">
                 <MenuItem Header="Login" HorizontalAlignment="Left" Width="175" Click="MenuItem_Click_4"/>
-                <MenuItem Header="Admin__Debug__Login" HorizontalAlignment="Left" Width="200" Click="MenuItem_Click_5"/>
-                <MenuItem Header="Admin__Test__MySQL" HorizontalAlignment="Left" Width="200" Click="MenuItem_Click_6"/>
+                <MenuItem Header="Admin__EMail__Test" HorizontalAlignment="Left" Width="205" Click="MenuItem_Click_8"/>
+                <MenuItem Header="Admin__Debug__Login" HorizontalAlignment="Left" Width="210" Click="MenuItem_Click_5"/>
+                <MenuItem Header="Admin__Test__MySQL" HorizontalAlignment="Left" Width="210" Click="MenuItem_Click_6"/>
+                <MenuItem Header="Logout" HorizontalAlignment="Left" Width="180" Click="MenuItem_Click_9"/>
             </MenuItem>
             <MenuItem Header="Refresh" Click="Button_Click_2"/>
             <MenuItem Header="Ganttify" Click="MenuItem_Click_7"/>
         </Menu>
 
-        <WindowsFormsHost x:Name="wfhTest" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="5">
+        <WindowsFormsHost x:Name="wfhTest" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="6" Visibility="Hidden">
             <WinForms:FlowLayoutPanel/>
         </WindowsFormsHost>
+
+        <Label Name="introLabel" Grid.Row="1" FontSize="60" VerticalContentAlignment="Top" HorizontalAlignment="Center" FontFamily="/WPFTest;component/Resources/#Roboto Light" Grid.Column="2" Margin="236,0,235,0">
+            Better Project
+        </Label>
+        <Label Name="introLabel2" Grid.Row="1" FontSize="30" VerticalContentAlignment="Top" HorizontalAlignment="Center" FontFamily="/WPFTest;component/Resources/#Roboto Light" Margin="0,75,0,0">
+            Ben Pople - 2017
+        </Label>
+
+        <Grid Name="RegistrationGrid" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox x:Name="txtUsername" Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="/WPFTest;component/Resources/#Roboto Light" FontSize="60" Background="{x:Null}" BorderBrush="Black" BorderThickness="0,0,0,5">Username</TextBox>
+            <PasswordBox Name="RegisterPassword" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="/WPFTest;component/Resources/#Roboto Light" FontSize="60" Background="{x:Null}" BorderBrush="Black" Password="password" BorderThickness="0,0,0,5"/>
+            <TextBox x:Name="txtFirstName" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="/WPFTest;component/Resources/#Roboto Light" FontSize="60" Background="{x:Null}" BorderBrush="{x:Null}">First Name</TextBox>
+            <TextBox x:Name="txtSurname" Grid.Column="3" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="/WPFTest;component/Resources/#Roboto Light" FontSize="60" Background="{x:Null}" BorderBrush="{x:Null}">Surname</TextBox>
+            <TextBox x:Name="txtEmail" Grid.Column="0" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="/WPFTest;component/Resources/#Roboto Light" FontSize="60" Background="{x:Null}" BorderBrush="{x:Null}">Email</TextBox>
+            <TextBox x:Name="txtDOB" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="/WPFTest;component/Resources/#Roboto Light" FontSize="60" Background="{x:Null}" BorderBrush="{x:Null}" Text="Date of Birth (DD/MM/YYYY)"/>
+
+            <Button x:Name="btnRegister" Grid.Row="3" Grid.Column="0" Background="#FF009EE8" FontFamily="/WPFTest;component/Resources/#Roboto Light" FontSize="36" BorderBrush="{x:Null}" Foreground="White" Click="Button_Click">Register</Button>
+            <Button x:Name="btnlogin" Grid.Row="3" Grid.Column="1" Background="#FF009EE8" FontFamily="/WPFTest;component/Resources/#Roboto Light" FontSize="36" BorderBrush="{x:Null}" Foreground="White" Click="Button_Click_1">Login</Button>
+        </Grid>
 
         <tb:TaskbarIcon
         IconSource="/WPFTest;component/Resources/icon.ico"
         ToolTipText="Better Project"
-        Name="taskbarIcon">
+        Name="taskbarIcon" Grid.ColumnSpan="2">
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Show" Click="MenuItem_Click">
@@ -67,7 +92,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
-                </tb:TaskbarIcon.ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
 
     </Grid>

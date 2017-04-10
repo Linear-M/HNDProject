@@ -71,7 +71,7 @@ namespace WPFTest
                 prjDueDate = Convert.ToDateTime(txtDatePicker.Text);
                 DateTime startDate = DateTime.Now.Date;
                 //Move the data to the model
-                DatabaseHandler.addNewProject("Ben", prjName, prjDescription, startDate, prjDueDate);
+                DatabaseHandler.addNewProject(LoginHandler.username, prjName, prjDescription, startDate, prjDueDate);
 
             }
             catch (Exception)

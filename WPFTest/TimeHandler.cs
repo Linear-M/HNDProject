@@ -25,7 +25,6 @@ namespace WPFTest
         {
             get
             {
-                
                 return monday;
             }
             set
@@ -37,7 +36,6 @@ namespace WPFTest
         {
             get
             {
-                
                 return tuesday;
             }
             set
@@ -49,7 +47,6 @@ namespace WPFTest
         {
             get
             {
-                
                 return wednesday;
             }
             set
@@ -61,7 +58,6 @@ namespace WPFTest
         {
             get
             {
-                
                 return thursday;
             }
             set
@@ -72,8 +68,7 @@ namespace WPFTest
         public static double Friday
         {
             get
-            {
-                
+            { 
                 return friday;
             }
             set
@@ -85,7 +80,6 @@ namespace WPFTest
         {
             get
             {
-                
                 return saturday;
             }
             set
@@ -97,7 +91,6 @@ namespace WPFTest
         {
             get
             {
-                
                 return sunday;
             }
             set
@@ -296,6 +289,7 @@ namespace WPFTest
 
         public static bool shouldSendEmail()
         {
+            //Checks to see if a 'new week' has started and an email should be sent
             if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
             {
                 return true;
@@ -305,7 +299,9 @@ namespace WPFTest
 
         public static DateTime estimatedTaskStartDate(int projectID)
         {
-            //Calculate the start date for a new task
+            /*Calculate the start date for a new task - for each project find the highest priority task and priority, this then
+             * sets the priority required to find the last EFT and therfore the newest ST
+             */
             foreach (Project project in ModelView.projectList)
             {
                 if (project.ID == projectID)
@@ -343,14 +339,17 @@ namespace WPFTest
                 {
                     foreach (Task t in project.taskList)
                     {
+                        //If current task is P2 and this iteration's P is P1 then return EFT of P1
                         if (priority == 2 && t.Priority == 1)
                         {
                             return t.EstimatedFinishingDate;
                         }
+                        //If P_wanted != 2 but this iteration's P is P1 then return start date of the task as it is correct
                         else if (priority == 1)
                         {
                             return task.StartDate;
                         }
+                        //If we have reached iteration of the previous task, return its EFT for the newest P_startDate
                         else if (t.Priority == (priority - 1))
                         {
                             return t.EstimatedFinishingDate;
@@ -358,7 +357,30 @@ namespace WPFTest
                     }
                 }
             }
+            //If for some reason none of these are true, return MinValue which is error handled elsewhere
             return DateTime.MinValue;
+        }
+
+        public static double getProjectHoursFromTasks(Project project)
+        {
+            /*
+             * This method takes a project and returns it's length (the length of all tasks within it combined) as database value may be lagging behind
+             */
+            double projectLength = 0;
+
+            //For each task in the project's task list add its length to projectLength and return it
+            foreach (Task task in project.taskList)
+            {
+                projectLength += task.TaskLength;
+            }
+
+            return projectLength;
+        }
+
+        public static DateTime ConvertToAccessDateTime(DateTime d)
+        {
+            //Will return dd/mm/yyyy OR dd/mm/yyyy hh:mm:ss, taking any datetime format and returning one that an access database will accept as date/time
+            return new DateTime(d.Year, d.Month, d.Day, d.Hour, d.Minute, d.Second);
         }
     }
 }

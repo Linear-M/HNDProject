@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.IO;
 
 namespace WPFTest
 {
@@ -35,6 +36,14 @@ namespace WPFTest
             get
             {
                 return _currentProject;
+            }
+        }
+
+        public static string temporaryPictureString
+        {
+            get
+            {
+                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocume‌​nts) + "\\BetterProject\\TempImage.jpg";
             }
         }
 
@@ -90,7 +99,7 @@ namespace WPFTest
             if (LoginHandler.shouldSendEMail)
             {
                 EMail email = new EMail();
-                email.sendEmail(emailBody());
+                email.sendEMail(emailBody());
                 LoginHandler.shouldSendEMail = false;
             }
         }
@@ -114,7 +123,7 @@ namespace WPFTest
                     point.BackSecondaryColor = Color.Black;
                     point.BackHatchStyle = ChartHatchStyle.None;
                     point.BorderWidth = 1;
-                    point.Color = ColorTranslator.FromHtml("#009ee8");
+                    point.Color = UI.dataPointColour;
                 }
                 //If the mouse if over a data point (bar)
                 if (result.ChartElementType == ChartElementType.DataPoint)
@@ -123,7 +132,7 @@ namespace WPFTest
                     DataPoint point = getHoveredPoint(result, usedChart);
 
                     //Change the bar to make it seem highlighted (cross-hatch and lighter colour than the bar itself)
-                    point.Color = ColorTranslator.FromHtml("#0077af");
+                    point.Color = UI.dataPointHoverColour;
                 }
 
                 //Draw labels
@@ -380,7 +389,7 @@ namespace WPFTest
             }
         }
 
-        public static void taskListComboBoxHandler(System.Windows.Controls.ComboBox cb)
+        public static void projectListComboBoxHandler(System.Windows.Controls.ComboBox cb)
         {
             /*
              * This method takes a combo box and organises what items it should have based on loaded projects
@@ -401,9 +410,35 @@ namespace WPFTest
                     cb.Items.Add("No Projects Loaded - Please Login");
                 }
             }
-       }
+        }
 
-       public static int nextTaskPriority(Project project)
+        public static void taskListComboBoxHandler(System.Windows.Controls.ComboBox TaskComboBox, string ProjectName)
+        {
+            /*
+             * This method takes a combo box and organises what items it should have based on loaded projects
+             */
+                TaskComboBox.Items.Clear();
+                //ProjectList is an ArrayList of Project objects where project.x is the Project List
+                if (projectList.Count != 0)
+                {
+                    foreach (Project project in projectList)
+                    {
+                        if (project.x == ProjectName)
+                        {
+                            foreach (Task task in project.taskList)
+                            {
+                                TaskComboBox.Items.Add(task.TaskName);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    TaskComboBox.Items.Add("No Tasks Loaded - Please Login or Select a Project");
+                }
+        }
+
+        public static int nextTaskPriority(Project project)
         {
             /*
              * This method identifies what priority a task should have and effectively applies them
@@ -441,13 +476,14 @@ namespace WPFTest
             /*
              * This method returns a long string that constitutes the entire body of an email. It shows a welcome message, project list and a seperate table per project of current tasks, their lengths and notes
              */  
-            string body = "<!DOCTYPE html><html><head><style>table,th,td{border: 1px solid black; padding: 5px;} table{border-spacing: 5px;} h1,p,td,tr,th,body{font-family: arial;} body{background-color: lightblue;}</style></head><body>";
+            string body = "<!DOCTYPE html><html><head><style>table,th,td{border: 1px solid black; padding: 5px;} table{border-spacing: 5px;}" 
+                + "h1,p,td,tr,th,body{font-family: #eaf2ff;} body{background-color: " +  UI.chartColour + ";}</style></head><body>";
 
             body += "<h1>Hi, " + LoginHandler.username + "!</h1>";
 
-            body += "<p>You've been busy this week - you currently have " + projectList.Count + " projects you're working on totalling " + taskCount + " tasks.</p>";
+            body += "<p>You've been busy this week - you currently have " + projectList.Count + " project(s) you're working on totalling " + taskCount + " task(s).</p>";
 
-            body += "<p>Here's a list of your projects:</p>";
+            body += "<p>Here's a list of your project(s):</p>";
 
             body += "<table><tr><th>Project List</th><th>Project Length</th></tr>";
 
@@ -474,7 +510,13 @@ namespace WPFTest
                         
                         if (task.StartDate != DateTime.MinValue)
                         {
-                            body += "<td>You started this task on " + task.StartDate.ToShortDateString() + " and are on target to finish it by " + task.EstimatedFinishingDate.ToShortDateString() + "</td></tr>";
+                            if (task.StartDate <= DateTime.Now)
+                            {
+                                body += "<td>You started this task on " + task.StartDate.ToShortDateString() + " and are on target to finish it by " + task.EstimatedFinishingDate.ToShortDateString() + "</td></tr>";
+                            } else
+                            {
+                                body += "<td>You start this task on " + task.StartDate.ToShortDateString() + " and are on target to finish it by " + task.EstimatedFinishingDate.ToShortDateString() + "</td></tr>";
+                            }
                         } else
                         {
                             body += "<td>While this task isn't your priority, there's no harm in starting it!</td></tr>";
@@ -490,7 +532,7 @@ namespace WPFTest
         public static string generateBaloonMessage()
         {
             //Return an informational message with the first-priority project and task, if none are available nudge the user to open the app and add projects/tasks
-            string returnString = "Another hour has passed, are you still working on (Project: Task):";
+            string returnString = "Are you still working on (Project: Task):";
             foreach (Project project in projectList)
             {
                 foreach (Task task in project.taskList)
@@ -528,6 +570,38 @@ namespace WPFTest
             }
         }
 
+        public static Project projectFromName(string ProjectName)
+        {
+            /*
+             * Take a project name as a string and return the project object
+             */
+                foreach (Project project in projectList)
+                {
+                  if (project.x == ProjectName)
+                    {
+                        return project;
+                    }
+                }
+            return null;
+        }
+
+        public static Task taskFromName(string TaskName)
+        {
+            /*
+             * Take a task name as a string and return the task object
+             */
+            foreach (Project project in projectList)
+            {
+                foreach (Task task in project.taskList)
+                {
+                    if (task.TaskName == TaskName)
+                    {
+                        return task;
+                    }
+                }
+            }
+            return null;
+        }
         
 
     }

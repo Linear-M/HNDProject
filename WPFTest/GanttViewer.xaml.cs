@@ -26,17 +26,26 @@ namespace WPFTest
             InitializeComponent();
             System.Windows.Forms.Integration.WindowsFormsHost host = new System.Windows.Forms.Integration.WindowsFormsHost();
 
+
+            //Set the new WFH object equal to a new gantt chart of selected project
             host.Child = Gantt.returnGantt(project);
 
-            // Add the chart to the grid so it can be displayed.
-            wfhGantt.Child = host.Child;
+            if (host.Child != null)
+            {
+                // Add the chart to the grid so it can be displayed.
+                wfhGantt.Child = host.Child;
 
-            //Bind the MouseMove and MouseClick handler
-            wfhGantt.Child.MouseMove += Child_MouseMove;
-            wfhGantt.Child.MouseClick += Child_MouseClick;
+                //Bind the MouseMove and MouseClick handler
+                wfhGantt.Child.MouseMove += Child_MouseMove;
+                wfhGantt.Child.MouseClick += Child_MouseClick;
 
-            Background = UI.leftBorderColor;
-            this.Show();
+                Background = UI.leftBorderColor;
+                this.Show();
+            } else
+            {
+                System.Windows.MessageBox.Show("Error loading Gantt chart - make sure you are in 'Task' view!");
+            }
+
         }
 
         private void Child_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -51,16 +60,21 @@ namespace WPFTest
 
         private void SaveImage(System.Windows.Forms.Control control)
         {
+            //Objects
             GanttChart.GanttChart gantt = control as GanttChart.GanttChart;
             SaveFileDialog savefile = new SaveFileDialog();
-            // set a default file name
-            savefile.FileName = "GanttChart-" + DateTime.Now.Day + "." + DateTime.Now.Month + "." + DateTime.Now.Year + "-" + ModelView.currentProject.x + ".jpg";
-            // set filters - this can be done in properties as well
+            DateTime now = DateTime.Now;
+
+            //Give a decent template name
+            savefile.FileName = "GanttChart-" + now.Day + "." + now.Month + "." + now.Year + "-" + ModelView.currentProject.x + ".jpg";
+            //Filters are nicer for the average user
             savefile.Filter = "Image files (*.jpg)|*.jpg|All files (*.*)|*.*";
 
             if (savefile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                //Save image to where the user wants as well as the temporary image for email
                 gantt.SaveImage(savefile.FileName);
+                gantt.SaveImage(ModelView.temporaryPictureString);
             }
         }
 

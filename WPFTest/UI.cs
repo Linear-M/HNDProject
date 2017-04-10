@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Media = System.Windows.Media;
 
 namespace WPFTest
 {
     class UI
     {
+        //Encapsulated variables
         private static PrivateFontCollection _fontCollection;
 
         public static PrivateFontCollection fontCollection
@@ -48,6 +45,7 @@ namespace WPFTest
 
         public static Media.SolidColorBrush dataPointColourXml
         {
+            //Media.* are WPF API methods and have very insimplstic hex colour conversions
             get
             {
                 return (Media.SolidColorBrush)(new Media.BrushConverter().ConvertFrom("#009ee8"));
@@ -64,6 +62,7 @@ namespace WPFTest
 
         public static Media.SolidColorBrush leftBorderColor
         {
+            //Media.* are WPF API methods and have very insimplstic hex colour conversions
             get
             {
                 return (Media.SolidColorBrush)(new Media.BrushConverter().ConvertFrom("#eaf2ff"));
@@ -74,40 +73,37 @@ namespace WPFTest
         {
             get
             {
-                Font font = new Font(fontCollection.Families[0], 10);
-                //option 1
-                Media.FontFamily mfont = new Media.FontFamily(font.Name);
-                //option 2 does the same thing
-                Media.FontFamilyConverter conv = new Media.FontFamilyConverter();
-                Media.FontFamily mfont1 = conv.ConvertFromString(font.Name) as Media.FontFamily;
-                //option 3
-                Media.FontFamily mfont2 = Media.Fonts.SystemFontFamilies.Where(x => x.Source == font.Name).FirstOrDefault();
-                return mfont;
+                //Media.* are WPF API methods and have very insimplstic font conversions
+                return new Media.FontFamily(new Font(fontCollection.Families[0], 10).Name);
             }
         }
 
         public static void initialiseCustomFonts()
         {
-            //Create your private font collection object.
-            _fontCollection = new PrivateFontCollection();
+            /*
+             * This approach to adding custom fonts is C++-esque however necessary for efficient usage and control in both WinForms, WinForms hosting
+             * and WPF conversions
+             */
 
-            //Select your font from the resources.
-            //My font here is "Digireu.ttf"
+            //Font collection to store font memory
+            _fontCollection = new PrivateFontCollection();
+            
+            //Google Roboto_Light is stored as ResX, get dimensional length
             int fontLength = Properties.Resources.Roboto_Light.Length;
 
-            // create a buffer to read in to
+            //Array of bytes to store font properties
             byte[] fontdata = Properties.Resources.Roboto_Light;
 
-            // create an unsafe memory block for the font data
-            System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+            //Volatile memory block to store dimensional length and reduce memory usage (volatile easier for GC to manage)
+            IntPtr data = Marshal.AllocCoTaskMem(fontLength);
 
-            // copy the bytes to the unsafe memory block
+            //Byte buffer array copied to the volatile block
             Marshal.Copy(fontdata, 0, data, fontLength);
 
-            // pass the font to the font collection
+            //Font is added from memory block to encapsulated font collection, called by collection.Familiies
             _fontCollection.AddMemoryFont(data, fontLength);
 
-            // free up the unsafe memory
+            //Force GC remove of byte array
             Marshal.FreeCoTaskMem(data);
         }
     }

@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFTest"
         mc:Ignorable="d"
-        Title="GanttViewer" Height="900" Width="1600" WindowStartupLocation="CenterScreen">
+        Title="GanttViewer" Height="900" Width="1600" Background="#FFEAF2FF" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -15,11 +16,11 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Menu Grid.Row="0">
+        <Menu Grid.Row="0" Background="#FFEAF2FF" FontFamily="/WPFTest;component/Resources/#Roboto Light" FontSize="14">
             <MenuItem Header="Save Image of Gantt Chart" Click="MenuItem_Click"/>
         </Menu>
         
-        <WindowsFormsHost Name="wfhGantt" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        <WindowsFormsHost Name="wfhGantt" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
 
     </Grid>
 </Window>

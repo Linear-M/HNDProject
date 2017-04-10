@@ -11,14 +11,14 @@ namespace WPFTest
 {
     class Gantt
     {
-       public Gantt()
-        {
-        }
-
         public static GanttChart.GanttChart returnGantt(Project project)
         {
+            /*
+             * This method takes a project and returns a Gantt Chart object that can be displayed and manipulated
+             */
                 GanttChart.GanttChart ganttChart1 = new GanttChart.GanttChart();
-
+            try
+            {
                 //Gantt chart settings
                 ganttChart1.AllowChange = false;
                 ganttChart1.FromDate = project.dateStarted.AddDays(-2);
@@ -27,7 +27,7 @@ namespace WPFTest
                 ganttChart1.ForeColor = Color.Black;
                 ganttChart1.BackColor = UI.chartColour;
                 int barIndex = 0;
-                
+
                 //For each task add a relevant row in the gantt chart
                 foreach (Task task in project.taskList)
                 {
@@ -41,10 +41,13 @@ namespace WPFTest
                     BarInformation bInf = new BarInformation(taskName, fromTime, toTime, barColor, barHoverColor, barIndex);
 
                     ganttChart1.AddChartBar(taskName, bInf, fromTime, toTime, barColor, barHoverColor, barIndex);
-                MessageBox.Show("GNC");
                 }
-
                 return ganttChart1;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

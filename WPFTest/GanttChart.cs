@@ -599,7 +599,7 @@ namespace GanttChart
                         //Scale the font direction by ~10%f for each bar to draw
                         foreach (ChartBarDate barD in bars)
                         {
-                            scalingFactor += 0.1f;
+                            scalingFactor += 0.2f;
                         }
 
                         //Draw string with new scaling
